@@ -1,0 +1,60 @@
+name: Releases
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+jobs:
+  changelog:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: create temporary branch
+        uses: peterjgrainger/action-create-branch@v2.3.0
+        id: create-branch
+        with:
+          branch: "release-from-${{ github.event.pull_request.head.sha }}"
+          sha: "${{ github.event.pull_request.head.sha }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/checkout@v3
+
+      - name: switch to new branch
+        run: git fetch --all && git checkout --track origin/release-from-${{ github.event.pull_request.head.sha }}
+
+      - name: conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version-file: "./package.json,./package-lock.json"
+          git-branch: "release-from-${{ github.event.pull_request.head.sha }}"
+          skip-on-empty: false
+          skip-git-pull: true
+
+      - name: create PR with release info
+        id: create-pr
+        run: gh pr create --base master --head release-from-${{ github.event.pull_request.head.sha }} --title 'Merge new release into master' --body 'Created by Github action'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: merge PR with release info
+        id: merge-pr
+        run: gh pr merge --admin --merge --subject 'Merge release info' --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: create release with last commit
+        uses: actions/create-release@v1
+        if: steps.changelog.outputs.skipped == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
