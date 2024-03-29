@@ -1,5 +1,5 @@
 # Change these variables as necessary.
-MAIN_PACKAGE_PATH := snippetbox.consdotpy.xyz
+MAIN_PACKAGE_PATH := ./cmd/web
 BINARY_NAME := snippetbox
 
 # ==================================================================================== #
@@ -92,4 +92,3 @@ production/deploy: confirm tidy audit no-dirty
 	GOOS=linux GOARCH=amd64 go build -ldflags='-s' -o=/tmp/bin/linux_amd64/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 	upx -5 /tmp/bin/linux_amd64/${BINARY_NAME}
 	# Include additional deployment steps here...
-	
