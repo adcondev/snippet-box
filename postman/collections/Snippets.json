@@ -55,6 +55,27 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Download",
+			"id": "523a9fed-de17-439d-b0ef-5bc9710e2200",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/download",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"download"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
