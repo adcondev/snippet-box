@@ -16,13 +16,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{URL}}/snippet/view",
+					"raw": "{{URL}}/snippet/view?id=123",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"snippet",
 						"view"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "123"
+						}
 					]
 				}
 			},
