@@ -1,9 +1,9 @@
-# 0.2.0 (2024-03-29)
+# 0.3.0 (2024-03-29)
 
 
 ### Features
 
-* :sparkles: setup servemux ([5b0b02b](https://github.com/ConsDotPy/snippet-box/commit/5b0b02bfa6fdd3349a7dfbcf2e7ede484e6b2027))
+* add postman ([4b07874](https://github.com/ConsDotPy/snippet-box/commit/4b07874e4d5afd1d183a80c067232b93977084c6))
 
 
 
