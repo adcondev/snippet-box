@@ -1,5 +1,5 @@
 # Change these variables as necessary.
-MAIN_PACKAGE_PATH := ./main.go
+MAIN_PACKAGE_PATH := snippetbox.consdotpy.xyz
 BINARY_NAME := snippetbox
 
 # ==================================================================================== #
