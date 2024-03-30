@@ -76,7 +76,7 @@ func snippetCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 // downloadSnippet is a handler function that serves the "/download/" URL.
-func downloadSnippet(w http.ResponseWriter, r *http.Request) {
+func snippetDownload(w http.ResponseWriter, r *http.Request) {
 	// Clean the URL path to prevent directory traversal attacks.
 	r.URL.Path = path.Clean(r.URL.Path)
 	// Serve the static file.
