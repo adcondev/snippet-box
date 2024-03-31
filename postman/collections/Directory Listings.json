@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "89244c79-df63-4449-9494-177620c68c32",
+		"name": "Directory Listings",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "28710272-89244c79-df63-4449-9494-177620c68c32"
+	},
+	"item": [
+		{
+			"name": "Hided /static",
+			"id": "b7d127ff-c9b1-4bb7-bbeb-0b8bc7981d35",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/static",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"static"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Showed /css",
+			"id": "8917be0c-37fa-4472-922e-9fd6c10337c1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/static/css",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"static",
+						"css"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hided /img",
+			"id": "19043897-e2f8-4305-b84b-3a672429a3ec",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/static/img",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"static",
+						"img"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hided /js",
+			"id": "e2f15dad-b8e5-45f8-a7d0-77ede6891330",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/static/js",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"static",
+						"js"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
