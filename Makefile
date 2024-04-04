@@ -1,6 +1,6 @@
-# Change these variables as necessary.
-MAIN_PACKAGE_PATH := ./cmd/web
-BINARY_NAME := snippetbox
+# Include the .env file
+include .env
+export
 
 # ==================================================================================== #
 # HELPERS
@@ -65,7 +65,7 @@ build:
 ## run: run the  application
 .PHONY: run
 run: build
-	/tmp/bin/${BINARY_NAME}
+	/tmp/bin/${BINARY_NAME} -addr=${SB_ADDR} -static-dir=${SB_STATIC_DIR}
 
 ## run/live: run the application with reloading on file changes
 .PHONY: run/live

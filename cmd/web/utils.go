@@ -6,15 +6,15 @@ import (
 	"path/filepath"
 )
 
-// neuteredFileSystem wraps an http.FileSystem to disable directory listings.
-type neuteredFileSystem struct {
+// limitedFileSystem wraps an http.FileSystem to disable directory listings.
+type limitedFileSystem struct {
 	fs http.FileSystem
 }
 
-// Open opens a file in the neuteredFileSystem.
+// Open opens a file in the limitedFileSystem.
 // If the file is a directory, Open tries to open its index.html file.
 // If the index.html file doesn't exist, Open returns an error.
-func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
+func (nfs limitedFileSystem) Open(path string) (http.File, error) {
 	// Open the file.
 	f, err := nfs.fs.Open(path)
 	if err != nil {
