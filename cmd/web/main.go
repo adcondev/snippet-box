@@ -7,19 +7,20 @@ import (
 	"os"
 )
 
-type application struct {
-	errorLog *log.Logger
-	infoLog  *log.Logger
-}
-
-type config struct {
+type configuration struct {
 	addr      string
 	staticDir string
 }
 
+type application struct {
+	errorLog *log.Logger
+	infoLog  *log.Logger
+	config   configuration
+}
+
 // main is the application's entry point.
 func main() {
-	var cfg config
+	var cfg configuration
 	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "Path to static assets")
 	flag.Parse()
@@ -35,28 +36,16 @@ func main() {
 		log.Ldate|log.Ltime|log.LUTC|log.Llongfile,
 	)
 
-	snippetbox := &application{
+	app := &application{
 		errorLog: errorLog,
 		infoLog:  infoLog,
+		config:   cfg,
 	}
-
-	// Create a new ServeMux.
-	mux := http.NewServeMux()
-
-	// Serve static files from "./ui/static/" directory.
-	fileServer := http.FileServer(http.Dir(cfg.staticDir))
-	mux.Handle("/static", http.NotFoundHandler())
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-
-	// Register handler functions for URL patterns.
-	mux.HandleFunc("/", snippetbox.home)
-	mux.HandleFunc("/snippet/view", snippetbox.snippetView)
-	mux.HandleFunc("/snippet/create", snippetbox.snippetCreate)
 
 	srv := &http.Server{
 		Addr:     cfg.addr,
 		ErrorLog: errorLog,
-		Handler:  mux,
+		Handler:  app.routes(),
 	}
 
 	// Start server on port 4000.
