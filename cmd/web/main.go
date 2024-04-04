@@ -7,6 +7,11 @@ import (
 	"os"
 )
 
+type application struct {
+	errorLog *log.Logger
+	infoLog  *log.Logger
+}
+
 type config struct {
 	addr      string
 	staticDir string
@@ -30,19 +35,23 @@ func main() {
 		log.Ldate|log.Ltime|log.LUTC|log.Llongfile,
 	)
 
+	snippetbox := &application{
+		errorLog: errorLog,
+		infoLog:  infoLog,
+	}
+
 	// Create a new ServeMux.
 	mux := http.NewServeMux()
 
 	// Serve static files from "./ui/static/" directory.
-	fileServer := http.FileServer(limitedFileSystem{http.Dir(cfg.staticDir)})
+	fileServer := http.FileServer(http.Dir(cfg.staticDir))
 	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
 	// Register handler functions for URL patterns.
-	mux.HandleFunc("/", home)
-	mux.HandleFunc("/snippet/view", snippetView)
-	mux.HandleFunc("/snippet/create", snippetCreate)
-	mux.HandleFunc("/download/", snippetDownload)
+	mux.HandleFunc("/", snippetbox.home)
+	mux.HandleFunc("/snippet/view", snippetbox.snippetView)
+	mux.HandleFunc("/snippet/create", snippetbox.snippetCreate)
 
 	srv := &http.Server{
 		Addr:     cfg.addr,
