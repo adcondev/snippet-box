@@ -9,7 +9,7 @@ func (app *application) routes() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	// Serve static files from "./ui/static/" directory.
-	fileServer := http.FileServer(http.Dir(app.config.staticDir))
+	fileServer := http.FileServer(limitedFileSystem{http.Dir(app.config.staticDir)})
 	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
