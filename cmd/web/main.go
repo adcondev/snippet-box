@@ -38,10 +38,10 @@ func openDB(dsn string) (*sql.DB, error) {
 
 // main is the application's entry point.
 func main() {
-	var cfg configuration
-	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
-	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static/", "Path to static assets")
-	flag.StringVar(&cfg.dsn, "dsn", "", "MySQL data source name")
+	var config configuration
+	flag.StringVar(&config.addr, "addr", ":4000", "HTTP network address")
+	flag.StringVar(&config.staticDir, "static-dir", "./ui/static/", "Path to static assets")
+	flag.StringVar(&config.dsn, "dsn", "", "MySQL data source name")
 	flag.Parse()
 
 	infoLog := log.New(
@@ -55,28 +55,37 @@ func main() {
 		log.Ldate|log.Ltime|log.LUTC|log.Llongfile,
 	)
 
-	db, err := openDB(cfg.dsn)
+	db, err := openDB(config.dsn)
 	if err != nil {
 		errorLog.Fatal(err)
 	}
 
 	defer db.Close()
 
+	snippets, err := models.NewSnippetModel(db)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
+	defer snippets.InsertStmt.Close()
+	defer snippets.GetStmt.Close()
+	defer snippets.LatestStmt.Close()
+
 	app := &application{
 		errorLog: errorLog,
 		infoLog:  infoLog,
-		config:   cfg,
-		snippets: &models.SnippetModel{DB: db},
+		config:   config,
+		snippets: snippets,
 	}
 
 	srv := &http.Server{
-		Addr:     cfg.addr,
+		Addr:     config.addr,
 		ErrorLog: errorLog,
 		Handler:  app.routes(),
 	}
 
 	// Start server.
-	infoLog.Printf("Starting server on %s", cfg.addr)
+	infoLog.Printf("Starting server on %s", config.addr)
 	err = srv.ListenAndServe()
 
 	// Log and exit on server start error.
