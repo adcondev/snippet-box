@@ -1,9 +1,9 @@
-# 0.8.0 (2024-04-07)
+# 0.9.0 (2024-04-07)
 
 
 ### Features
 
-* :sparkles: add db connection ([4741093](https://github.com/ConsDotPy/snippet-box/commit/47410934046a85b858f23d4afbb1fa510d26d004))
+* :sparkles: add transactions and prepared statements ([9de5a5f](https://github.com/ConsDotPy/snippet-box/commit/9de5a5f8ecc67bcb3a949d79ce5af56e36d5b0db))
 
 
 
