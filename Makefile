@@ -65,7 +65,12 @@ build:
 ## run: run the  application
 .PHONY: run
 run: build
-	${TMP_FOLDER}/bin/${BINARY_NAME} -addr=${SB_ADDR} -static-dir=${SB_STATIC_DIR} >>${TMP_FOLDER}info.log 2>>${TMP_FOLDER}error.log
+	${TMP_FOLDER}/bin/${BINARY_NAME} -addr=${SB_ADDR} -static-dir=${SB_STATIC_DIR} -dsn=${DB_DSN}
+
+## run/logs: run the  application
+.PHONY: run/logs
+run/logs: build
+	${TMP_FOLDER}/bin/${BINARY_NAME} -addr=${SB_ADDR} -static-dir=${SB_STATIC_DIR} -dsn=${DB_DSN} >>${TMP_FOLDER}/info.log 2>>${TMP_FOLDER}/error.log
 
 ## run/live: run the application with reloading on file changes
 .PHONY: run/live
