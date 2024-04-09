@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"text/template"
 
 	"snippetbox.consdotpy.xyz/internal/models"
 
@@ -19,10 +20,11 @@ type configuration struct {
 }
 
 type application struct {
-	errorLog *log.Logger
-	infoLog  *log.Logger
-	config   configuration
-	snippets *models.SnippetModel
+	errorLog      *log.Logger
+	infoLog       *log.Logger
+	config        configuration
+	snippets      *models.SnippetModel
+	templateCache map[string]*template.Template
 }
 
 func openDB(dsn string) (*sql.DB, error) {
@@ -71,11 +73,17 @@ func main() {
 	defer snippets.GetStmt.Close()
 	defer snippets.LatestStmt.Close()
 
+	templateCache, err := newTemplateCache()
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	app := &application{
-		errorLog: errorLog,
-		infoLog:  infoLog,
-		config:   config,
-		snippets: snippets,
+		errorLog:      errorLog,
+		infoLog:       infoLog,
+		config:        config,
+		snippets:      snippets,
+		templateCache: templateCache,
 	}
 
 	srv := &http.Server{

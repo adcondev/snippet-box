@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 
@@ -24,32 +23,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, snippet := range snippets {
-		fmt.Fprintf(w, "%+v", snippet)
-	}
+	data := app.newTemplateData()
+	data.SnippetsData = snippets
 
-	// Define a slice that holds the file paths for the templates.
-	files := []string{
-		"./ui/html/pages/home.html",
-		"./ui/html/partials/nav.html",
-		"./ui/html/base.html",
-	}
-
-	// Use the template.ParseFiles function to read the template files and store the templates in a template set.
-	ts, err := template.ParseFiles(files...)
-	// If there's an error, log the detailed error message and send a generic 500 Internal Server Error response to the user.
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-
-	// Use the ExecuteTemplate method to write the "base" template to the http.ResponseWriter.
-	// For now we're passing in nil as the last parameter, because we're not displaying any dynamic data.
-	err = ts.ExecuteTemplate(w, "base", nil)
-	// If there's an error, log the detailed error message and send a generic 500 Internal Server Error response to the user.
-	if err != nil {
-		app.serverError(w, err)
-	}
+	app.render(w, http.StatusOK, "home.html", data)
 }
 
 // snippetView is a handler function that serves the "/snippet/view" URL.
@@ -72,7 +49,11 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "%+v", snippet)
+	data := app.newTemplateData()
+	data.SnippetData = snippet
+
+	app.render(w, http.StatusOK, "view.html", data)
+
 }
 
 // snippetCreate is a handler function that serves the "/snippet/create" URL.
