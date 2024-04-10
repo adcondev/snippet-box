@@ -45,15 +45,20 @@ func newTemplateCache() (map[string]*template.Template, error) {
 		// Extract the file name (like 'home.page.html') from the full file path and assign it to the name variable.
 		name := filepath.Base(page)
 
-		// Check if a template set already exists in the cache for the page.
-		// If not, create a new template set.
-		ts, err := template.New(name).Funcs(functions).ParseFiles(page)
+		// Create a new template set.
+		ts, err := template.New(name).Funcs(functions).ParseFiles("./ui/html/base.html")
 		if err != nil {
 			return nil, err
 		}
 
-		// Add the base layout to the template set.
-		ts, err = ts.ParseGlob("./ui/html/layouts/*.layout.html")
+		// Add the partials layouts to the template set.
+		ts, err = ts.ParseGlob("./ui/html/partials/*.html")
+		if err != nil {
+			return nil, err
+		}
+
+		// Parse templates in pages folder
+		ts, err = ts.ParseFiles(page)
 		if err != nil {
 			return nil, err
 		}
