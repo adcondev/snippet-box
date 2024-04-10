@@ -4,6 +4,8 @@ package main
 // Import the necessary packages.
 import (
 	"net/http" // Package for building HTTP servers and clients.
+
+	"github.com/justinas/alice"
 )
 
 // routes sets up the application's routes and returns an http.Handler.
@@ -29,5 +31,11 @@ func (app *application) routes() http.Handler {
 
 	// Wrap the mux (ServeMux) with the recoverPanic, logRequest, and secureHeaders middleware functions.
 	// This means that every request will go through these middleware functions in the order they are listed.
-	return app.recoverPanic(app.logRequest(secureHeaders(mux)))
+	standard := alice.New(
+		app.recoverPanic,
+		app.logRequest,
+		secureHeaders,
+	)
+
+	return standard.Then(mux)
 }
