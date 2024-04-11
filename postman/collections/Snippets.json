@@ -7,75 +7,228 @@
 	},
 	"item": [
 		{
-			"name": "View",
-			"id": "9222df07-0344-48ce-9e05-fb999e93ccb2",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{URL}}/snippet/view?id=123",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"snippet",
-						"view"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "123"
+			"name": "Test to Success",
+			"item": [
+				{
+					"name": "Snippet View",
+					"id": "9222df07-0344-48ce-9e05-fb999e93ccb2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/snippet/view/13",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"snippet",
+								"view",
+								"13"
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Create Form",
+					"id": "537deaeb-9cde-45ea-a975-b2ec57cc24f5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/snippet/create",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"snippet",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Home",
+					"id": "92337547-ab25-463b-9921-0a2a03f48937",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}",
+							"host": [
+								"{{URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Snippet",
+					"id": "eb8372f3-5dc9-4566-ba02-8dcda8fc247a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/snippet/create",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"snippet",
+								"create"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"id": "28e0888e-274a-49a0-a5cb-c39de927865e"
 		},
 		{
-			"name": "Create",
-			"id": "537deaeb-9cde-45ea-a975-b2ec57cc24f5",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{URL}}/snippet/create",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"snippet",
-						"create"
-					]
+			"name": "Test to Fail",
+			"item": [
+				{
+					"name": "Snippet View Fail",
+					"id": "a8248dfc-fd9d-4b7d-986a-40927a5622d8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/snippet/view/13",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"snippet",
+								"view",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Form Copy",
+					"id": "4ad20d8e-feed-4535-91e9-466b2f849200",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/snippet/create",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"snippet",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Home Fail",
+					"id": "e0437586-b40d-4549-a7d2-73c6ddeda227",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}",
+							"host": [
+								"{{URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Snippet Copy",
+					"id": "0fe15f88-4873-44a8-8be7-654f17259799",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/snippet/create",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"snippet",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Snippet View Fail",
+					"id": "cf5e9071-1e58-471a-b657-70dda2622b7d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Not Found",
+					"id": "7007cda2-b623-4853-bfda-1a689b200626",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Download",
-			"id": "523a9fed-de17-439d-b0ef-5bc9710e2200",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{URL}}/download",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"download"
-					]
-				}
-			},
-			"response": []
+			],
+			"id": "8e966638-25a7-4578-bb73-ab6b9e684b84"
 		}
 	]
 }
