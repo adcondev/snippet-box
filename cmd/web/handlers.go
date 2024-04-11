@@ -8,18 +8,12 @@ import (
 	"net/http" // Package for building HTTP servers and clients.
 	"strconv"  // Package for converting strings to numeric types.
 
+	"github.com/julienschmidt/httprouter"
 	"snippetbox.consdotpy.xyz/internal/models" // Import the models package.
 )
 
 // home is a handler function that serves the root URL ("/").
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	// If the URL path isn't exactly "/", respond with a 404 status.
-	// This means the function only responds to the exact path "/" and not any other path.
-	if r.URL.Path != "/" {
-		http.NotFound(w, r)
-		return
-	}
-
 	// Fetch the latest snippets from the database.
 	// The Latest method is expected to return the most recent snippets.
 	snippets, err := app.snippets.Latest()
@@ -41,9 +35,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 // snippetView is a handler function that serves the "/snippet/view" URL.
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
-	// Convert the id from the URL query to an integer.
-	// The id is expected to be passed in the query string like "/snippet/view?id=1".
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := strconv.Atoi(params.ByName("id"))
 	// If the conversion fails (which means the id is not a valid integer) or the id is less than 1,
 	// respond with a 404 status by calling the notFound helper.
 	if err != nil || id < 1 {
@@ -76,20 +71,13 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	app.render(w, http.StatusOK, "view.html", data)
 }
 
-// snippetCreate is a handler function that serves the "/snippet/create" URL.
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
-	// If the request method is not POST, respond with a "Method Not Allowed" status.
-	// This means the function only responds to POST requests and not any other method.
-	if r.Method != http.MethodPost {
-		// Set the "Allow" header to "POST" to tell the client that only POST requests are allowed.
-		w.Header().Set("Allow", http.MethodPost)
-		// Respond with a 405 status by calling the clientError helper.
-		app.clientError(w, http.StatusMethodNotAllowed)
-		return
-	}
+	w.Write([]byte("Display the form for creating a new snippet..."))
+}
 
-	// Define the title, content, and expiration for the new snippet.
-	// In a real application, these would probably come from the request body.
+// snippetCreate is a handler function that serves the "/snippet/create" URL.
+func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) {
+
 	title := "0 snail"
 	content := "O snail\nClimb Mount Fuji,\nBut slowly, slowly!\n\n- Kobayashi Issa"
 	expires := 7
@@ -104,5 +92,5 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 
 	// If there's no error, the snippet was inserted successfully.
 	// Redirect the client to the page for the new snippet.
-	http.Redirect(w, r, fmt.Sprintf("/snippet/view?id=%d", id), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", id), http.StatusSeeOther)
 }
