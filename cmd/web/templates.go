@@ -15,6 +15,7 @@ type templateData struct {
 	CurrentYear  int               // The current year.
 	SnippetData  *models.Snippet   // Data for a single snippet.
 	SnippetsData []*models.Snippet // Data for multiple snippets.
+	Form         any
 }
 
 // functions is a map that acts as a lookup for functions that can be used in templates.
