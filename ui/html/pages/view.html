@@ -1,17 +1,24 @@
-{{define "title"}}Snippet #{{.SnippetData.ID}}{{end}}
+<!-- This template defines the title of the page as "Snippet #<snippet ID>" -->
+    {{define "title"}}Snippet #{{.SnippetData.ID}}{{end}}
 
-{{define "main"}}
-    {{with .SnippetData}}
-        <div class='snippet'>
-            <div class='metadata'>
-                <strong>{{.Title}}</strong>
-                <span>#{{.ID}}</span>
+    <!-- This template defines the main content of the page -->
+    {{define "main"}}
+        <!-- If there's snippet data, it's displayed -->
+        {{with .SnippetData}}
+            <!-- The snippet is displayed in a div -->
+            <div class='snippet'>
+                <!-- The metadata for the snippet (title and ID) is displayed in a div -->
+                <div class='metadata'>
+                    <strong>{{.Title}}</strong>
+                    <span>#{{.ID}}</span>
+                </div>
+                <!-- The content of the snippet is displayed in a preformatted text block -->
+                <pre><code>{{.Content}}</code></pre>
+                <!-- The creation and expiration dates for the snippet are displayed in a div -->
+                <div class='metadata'>
+                    <time>Created: {{.Created | humanDate}}</time>
+                    <time>Expires: {{.Expires | humanDate}}</time>
+                </div>
             </div>
-            <pre><code>{{.Content}}</code></pre>
-            <div class='metadata'>
-                <time>Created: {{.Created | humanDate}}</time>
-                <time>Expires: {{.Expires | humanDate}}</time>
-            </div>
-        </div>
+        {{end}}
     {{end}}
-{{end}}

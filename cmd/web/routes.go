@@ -9,19 +9,22 @@ import (
 	"github.com/justinas/alice"
 )
 
-// routes sets up the application's routes and returns an http.Handler.
+// router sets up the application routes. It returns an http.Handler that is the root of the application's routing hierarchy.
+// It creates a new httprouter.Router, registers handler functions for URL patterns, and wraps the router with middleware functions.
+// This function is useful for centralizing the application's routing logic.
 func (app *application) routes() http.Handler {
 	// Create a new ServeMux, which is an HTTP request multiplexer (router).
-	// It matches the URL of each incoming request against a list of registered patterns and calls the handler for the pattern that most closely matches the URL.
 	router := httprouter.New()
 
+	// Register a handler function for the root URL ("/").
+	// If the request URL does not match any registered patterns, the NotFoundHandler is called.
 	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		app.notFound(w)
 	})
 
 	// Create a new file server for serving static files.
 	// The file server is wrapped in the limitedFileSystem to prevent directory listing.
-	fileServer := http.FileServer(limitedFileSystem{http.Dir(app.config.staticDir)})
+	fileServer := http.FileServer(limitedFileSystem{http.Dir(app.config.StaticDir)})
 
 	// Register the file server as a handler function for all URLs that start with "/static/".
 	// The http.StripPrefix function modifies the request URL's path before the request reaches the file server.
@@ -35,7 +38,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/snippet/create", app.snippetCreate)
 	router.HandlerFunc(http.MethodPost, "/snippet/create", app.snippetCreatePost)
 
-	// Wrap the mux (ServeMux) with the recoverPanic, logRequest, and secureHeaders middleware functions.
+	// Wrap the router with the recoverPanic, logRequest, and secureHeaders middleware functions.
 	// This means that every request will go through these middleware functions in the order they are listed.
 	standard := alice.New(
 		app.recoverPanic,
@@ -43,5 +46,6 @@ func (app *application) routes() http.Handler {
 		secureHeaders,
 	)
 
+	// Return the router.
 	return standard.Then(router)
 }

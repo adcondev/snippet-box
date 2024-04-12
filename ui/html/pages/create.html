@@ -1,27 +1,39 @@
+<!-- This template defines the title of the page as "Create a New Snippet" -->
 {{define "title"}}Create a New Snippet{{end}}
 
+<!-- This template defines the main content of the page -->
 {{define "main"}}
+<!-- The form for creating a new snippet. On submission, it sends a POST request to the '/snippet/create' URL -->
 <form action='/snippet/create' method='POST'>
+    <!-- The field for entering the title of the snippet -->
     <div>
         <label>Title:</label>
+        <!-- If there's an error with the title field, it's displayed here -->
         {{with .Form.FieldErrors.title}}
             <label class="error">{{.}}</label>
         {{end}}
+        <!-- The input for the title field. Its value is set to the title in the form data -->
         <input type='text' name='title' value='{{.Form.Title}}'>
     </div>
+    <!-- The field for entering the content of the snippet -->
     <div>
         <label>Content:</label>
+        <!-- If there's an error with the content field, it's displayed here -->
         {{with .Form.FieldErrors.content}}
             <label class="error">{{.}}</label>
         {{end}}
+        <!-- The textarea for the content field. Its value is set to the content in the form data -->
         <textarea name='content'>{{.Form.Content}}</textarea>
     </div>
+    <!-- The field for selecting when the snippet should be deleted -->
     <div>
         <label>Delete in:</label>
+        <!-- The options for when the snippet should be deleted. The one that matches the expires value in the form data is checked -->
         <input type='radio' name='expires' value='365' {{if (eq .Form.Expires 365)}}checked{{end}}> One Year
         <input type='radio' name='expires' value='7' {{if (eq .Form.Expires 7)}}checked{{end}}> One Week
         <input type='radio' name='expires' value='1' {{if (eq .Form.Expires 1)}}checked{{end}}> One Day
     </div>
+    <!-- The button for submitting the form -->
     <div>
         <input type='submit' value='Publish snippet'>
     </div>

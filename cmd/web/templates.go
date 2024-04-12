@@ -10,12 +10,13 @@ import (
 	"snippetbox.consdotpy.xyz/internal/models" // Import the models package.
 )
 
-// templateData holds data to be passed into templates.
+// templateData holds data to be passed into templates. It is used to provide a consistent
+// structure for passing data to templates, making it easier to manage and evolve over time.
 type templateData struct {
-	CurrentYear  int               // The current year.
-	SnippetData  *models.Snippet   // Data for a single snippet.
-	SnippetsData []*models.Snippet // Data for multiple snippets.
-	Form         any
+	CurrentYear  int               // CurrentYear holds the current year.
+	SnippetData  *models.Snippet   // SnippetData holds data for a single snippet.
+	SnippetsData []*models.Snippet // SnippetsData holds data for multiple snippets.
+	Form         any               // Form holds form data.
 }
 
 // functions is a map that acts as a lookup for functions that can be used in templates.
@@ -29,8 +30,10 @@ func humanDate(t time.Time) string {
 }
 
 // newTemplateCache creates a new template cache as a map and returns it.
+// The cache is a map where the keys are page names (like 'home.page.html') and the values are the corresponding templates.
+// This function is useful for preloading all the templates into the cache on application startup.
+// This means that the templates do not need to be loaded from the disk every time a request is made, which improves the performance of the application.
 func newTemplateCache() (map[string]*template.Template, error) {
-
 	// Create a new template cache.
 	cache := map[string]*template.Template{}
 

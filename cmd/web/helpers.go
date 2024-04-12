@@ -11,12 +11,15 @@ import (
 	"time"          // Package for measuring and displaying time.
 )
 
-// limitedFileSystem wraps an http.FileSystem to disable directory listings.
+// limitedFileSystem is a wrapper around http.FileSystem that disables directory listings.
+// It includes a single field, fs, which represents the underlying file system.
 type limitedFileSystem struct {
-	fs http.FileSystem // The underlying file system.
+	fs http.FileSystem // fs is the underlying file system.
 }
 
-// Open opens a file in the limitedFileSystem.
+// Open opens a file in the limitedFileSystem. If the file is a directory, it tries to open its index.html file.
+// If the index.html file doesn't exist, it closes the directory and returns an error.
+// If the file or the index.html file exists, it returns the file and no error.
 func (nfs limitedFileSystem) Open(path string) (http.File, error) {
 	// Open the file.
 	f, err := nfs.fs.Open(path)
@@ -49,7 +52,8 @@ func (nfs limitedFileSystem) Open(path string) (http.File, error) {
 }
 
 // serverError is a helper function that writes an error message and stack trace to the errorLog,
-// then sends a 500 Internal Server Error response to the user.
+// then sends a 500 Internal Server Error response to the user. It takes an http.ResponseWriter to
+// write the response to, and an error to log and respond with.
 func (app *application) serverError(w http.ResponseWriter, err error) {
 	// Create a stack trace and store it in the variable trace.
 	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
@@ -60,20 +64,24 @@ func (app *application) serverError(w http.ResponseWriter, err error) {
 }
 
 // clientError is a helper function that sends a specific status code and corresponding description
-// to the user. You can use this function to send any 4xx status code to the user.
+// to the user. It takes an http.ResponseWriter to write the response to, and a status code to respond with.
+// This function can be used to send any 4xx status code to the user.
 func (app *application) clientError(w http.ResponseWriter, status int) {
 	// Use the http.Error function to send the status code and description to the user.
 	http.Error(w, http.StatusText(status), status)
 }
 
 // notFound is a helper function that sends a 404 Not Found status to the user.
+// It uses the clientError function to send the status code and description to the user.
 func (app *application) notFound(w http.ResponseWriter) {
 	// Use the clientError function to send a 404 status to the user.
 	app.clientError(w, http.StatusNotFound)
 }
 
 // render is a helper function that renders a template. It writes the rendered template to the
-// http.ResponseWriter, along with the provided HTTP status code.
+// http.ResponseWriter, along with the provided HTTP status code. If the template does not exist
+// in the cache, it sends a server error response. If there's an error when executing the template,
+// it also sends a server error response.
 func (app *application) render(w http.ResponseWriter, status int, page string, data *templateData) {
 	// Try to get the template set for the provided page from the cache.
 	ts, ok := app.templateCache[page]
@@ -103,11 +111,12 @@ func (app *application) render(w http.ResponseWriter, status int, page string, d
 	buf.WriteTo(w)
 }
 
-// newTemplateData is a helper function that creates a new templateData struct and initializes
-// its CurrentYear field to the current year.
+// newTemplateData is a helper function that creates a new instance of templateData.
+// It initializes the CurrentYear field to the current year.
+// This function is useful when you need to create a new templateData instance with the CurrentYear field already set.
 func (app *application) newTemplateData() *templateData {
-	// Create a new templateData struct.
-	// Initialize the CurrentYear field to the current year.
+	// Create a new templateData instance.
+	// Set the CurrentYear field to the current year.
 	return &templateData{
 		CurrentYear: time.Now().Year(),
 	}

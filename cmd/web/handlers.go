@@ -8,24 +8,29 @@ import (
 	"net/http" // Package for building HTTP servers and clients.
 	"strconv"  // Package for converting strings to numeric types.
 
-	"snippetbox.consdotpy.xyz/internal/models" // Import the models package.
-	"snippetbox.consdotpy.xyz/internal/validator"
-
-	"github.com/julienschmidt/httprouter"
+	"github.com/julienschmidt/httprouter"         // Import advanced routing and validation package
+	"snippetbox.consdotpy.xyz/internal/models"    // Import the models package.
+	"snippetbox.consdotpy.xyz/internal/validator" // Import validator package
 )
 
+// snippetCreateForm represents the form that captures user input for creating a new snippet.
+// It includes fields for the title, content, and expiration of the snippet, as well as a Validator
+// for validating the form fields.
 type snippetCreateForm struct {
-	Title   string
-	Content string
-	Expires int
-	validator.Validator
+	Title               string // Title is the title of the snippet provided by the user.
+	Content             string // Content is the actual code snippet provided by the user.
+	Expires             int    // Expires is the duration after which the snippet expires.
+	validator.Validator        // Validator is used to validate the form fields.
 }
 
-// home is a handler function that serves the root URL ("/").
+// home serves the root URL ("/"). It fetches the most recent snippets from the database
+// and renders them on the home page. If an error occurs (for example, a database error),
+// it sends a server error response.
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	// Fetch the latest snippets from the database.
 	// The Latest method is expected to return the most recent snippets.
 	snippets, err := app.snippets.Latest()
+
 	// If there's an error (for example, a database error), send a server error response.
 	if err != nil {
 		app.serverError(w, err)
@@ -42,37 +47,35 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	app.render(w, http.StatusOK, "home.html", data)
 }
 
-// snippetView is a handler function that serves the "/snippet/view" URL.
+// snippetView serves the "/snippet/view" URL. It fetches a snippet with a given ID from the database
+// and renders it on the page. If the snippet is not found or an error occurs, it sends an appropriate HTTP response.
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
-
+	// Extract the ID parameter from the URL.
 	params := httprouter.ParamsFromContext(r.Context())
-
 	id, err := strconv.Atoi(params.ByName("id"))
-	// If the conversion fails (which means the id is not a valid integer) or the id is less than 1,
-	// respond with a 404 status by calling the notFound helper.
+
+	// If the ID is not a valid integer or is less than 1, respond with a 404 status.
 	if err != nil || id < 1 {
 		app.notFound(w)
 		return
 	}
 
-	// Fetch the snippet with the given id from the database.
+	// Fetch the snippet with the given ID from the database.
 	snippet, err := app.snippets.Get(id)
-	// If there's an error, handle it.
+
+	// If an error occurs, handle it appropriately.
 	if err != nil {
-		// If the error is of type models.ErrNoRecord, that means no snippet with the given id was found,
-		// so respond with a 404 status by calling the notFound helper.
+		// If no snippet with the given ID was found, respond with a 404 status.
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
 		} else {
-			// For any other kind of error, respond with a 500 status by calling the serverError helper.
+			// For any other kind of error, respond with a 500 status.
 			app.serverError(w, err)
 		}
 		return
 	}
 
-	// If there's no error, the snippet was fetched successfully.
-	// Create a new template data map and add the snippet to it.
-	// This map will be passed to the template for rendering.
+	// If no error occurs, create a new template data map and add the snippet to it.
 	data := app.newTemplateData()
 	data.SnippetData = snippet
 
@@ -80,41 +83,56 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	app.render(w, http.StatusOK, "view.html", data)
 }
 
+// snippetCreate serves the "/snippet/create" URL. It initializes a new snippetCreateForm
+// with a default expiration of 365 days and renders the "create.html" template.
+// This method is used to display the form for creating a new snippet.
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
+	// Create a new template data map.
 	data := app.newTemplateData()
+
+	// Initialize a new snippetCreateForm with a default expiration of 365 days.
 	data.Form = snippetCreateForm{
 		Expires: 365,
 	}
 
+	// Render the "create.html" template with the provided data.
 	app.render(w, http.StatusOK, "create.html", data)
 }
 
-// snippetCreate is a handler function that serves the "/snippet/create" URL.
+// snippetCreatePost serves the "/snippet/create" URL for POST requests. It validates the form data
+// provided by the user and, if valid, inserts a new snippet into the database. If the form data is
+// not valid, it re-renders the form with error messages. If there's an error inserting the snippet
+// into the database, it sends a server error response. If the snippet is inserted successfully,
+// it redirects the client to the page for the new snippet.
 func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) {
-
+	// Parse the form data.
 	err := r.ParseForm()
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
 		return
 	}
 
+	// Extract the form values.
 	expires, err := strconv.Atoi(r.PostForm.Get("expires"))
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
 		return
 	}
 
+	// Initialize a new snippetCreateForm with the form values.
 	form := snippetCreateForm{
 		Title:   r.PostForm.Get("title"),
 		Content: r.PostForm.Get("content"),
 		Expires: expires,
 	}
 
+	// Validate the form values.
 	form.CheckField(validator.NotBlank(form.Title), "title", "This field cannot be blank")
 	form.CheckField(validator.MaxRunes(form.Title, 100), "title", "This field cannot be more than 100 characters long")
 	form.CheckField(validator.NotBlank(form.Content), "content", "This field cannot be blank")
 	form.CheckField(validator.AllowedInt(form.Expires, 1, 7, 365), "expires", "This field must equal 1, 7 or 365")
 
+	// If the form is not valid, re-render the form with error messages.
 	if !form.Valid() {
 		data := app.newTemplateData()
 		data.Form = form

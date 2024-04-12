@@ -7,7 +7,10 @@ import (
 	"net/http" // Package for building HTTP servers and clients.
 )
 
-// secureHeaders is a middleware that adds secure headers to the response.
+// secureHeaders is a middleware function that adds secure headers to the HTTP response.
+// It takes an http.Handler as input and returns an http.Handler.
+// The returned http.Handler adds several secure headers to the response header and then calls the ServeHTTP method of the input handler.
+// This function is useful for adding secure headers to all responses in a centralized way.
 func secureHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Add secure headers to the response.
@@ -22,10 +25,13 @@ func secureHeaders(next http.Handler) http.Handler {
 	})
 }
 
-// logRequest is a middleware that logs the request.
+// logRequest is a middleware function that logs the details of each HTTP request.
+// It takes an http.Handler as input and returns an http.Handler.
+// The returned http.Handler logs the remote address, protocol, method, and URL of the request, and then calls the ServeHTTP method of the input handler.
+// This function is useful for logging the details of each request in a centralized way.
 func (app *application) logRequest(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Log the request.
+		// Log the remote address, protocol, method, and URL of the request.
 		app.infoLog.Printf("%s - %s %s %s", r.RemoteAddr, r.Proto, r.Method, r.URL.RequestURI())
 
 		// Call the next handler in the chain.
@@ -33,7 +39,11 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 	})
 }
 
-// recoverPanic is a middleware that recovers from panic.
+// recoverPanic is a middleware function that recovers from any panics and writes a 500 Internal Server Error response.
+// It takes an http.Handler as input and returns an http.Handler.
+// The returned http.Handler uses the defer keyword to ensure that the function is called at the end, even if a panic occurs.
+// If a panic occurs, it sets the connection header to "close", logs the error, and sends a 500 Internal Server Error response.
+// This function is useful for recovering from panics in a centralized way and providing a user-friendly error message.
 func (app *application) recoverPanic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Use the defer keyword to ensure that this function is called at the end, even if a panic occurs.

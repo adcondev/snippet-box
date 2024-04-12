@@ -15,23 +15,30 @@ import (
 	_ "github.com/go-sql-driver/mysql" // Import the MySQL driver.
 )
 
-// configuration holds the configuration for the application.
+// configuration represents the application configuration. It includes fields for each configuration option.
+// These fields are populated with values from environment variables when the application starts.
+// This struct is useful for centralizing all configuration options and making them available throughout the application.
 type configuration struct {
-	addr      string // The network address to listen on.
-	staticDir string // The directory where static files are stored.
-	dsn       string // The data source name (DSN) for the database.
+	Addr      string // Addr is the network address that the application should listen on.
+	StaticDir string // StaticDir is the directory where static files are stored.
+	Dsn       string // Secret is the secret key used for session authentication.
 }
 
-// application holds the application-wide dependencies.
+// application holds the application-wide dependencies. It includes fields for the error and info loggers,
+// the application configuration, the model for snippets, and the cache for templates.
+// This struct is useful for making these dependencies available throughout the application.
 type application struct {
-	errorLog      *log.Logger                   // The logger for errors.
-	infoLog       *log.Logger                   // The logger for information.
-	config        configuration                 // The application configuration.
-	snippets      *models.SnippetModel          // The model for snippets.
-	templateCache map[string]*template.Template // The cache for templates.
+	errorLog      *log.Logger                   // errorLog is the logger for errors.
+	infoLog       *log.Logger                   // infoLog is the logger for information.
+	config        configuration                 // config is the application configuration.
+	snippets      *models.SnippetModel          // snippets is the model for snippets.
+	templateCache map[string]*template.Template // templateCache is the cache for templates.
 }
 
 // openDB opens a new database connection with the provided data source name (DSN).
+// It uses the sql.Open function to open a new database connection and the db.Ping function to establish a connection
+// and verify that the given DSN is valid. If there's an error when opening the connection or when pinging the database,
+// it returns nil and the error. If there's no error, it returns the database connection and nil for the error.
 func openDB(dsn string) (*sql.DB, error) {
 	// Open a new database connection with the provided DSN.
 	// sql.Open does not establish any connections to the database, nor does it validate driver connection parameters.
@@ -51,17 +58,16 @@ func openDB(dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
-// main is the application's entry point.
+// main is the application's entry point. It sets up the application configuration, loggers, database connection,
+// and HTTP server. It also handles any errors that occur during setup.
 func main() {
-	// Create a new configuration struct.
+	// Create a new configuration struct and parse command-line flags into it.
+	// The configuration includes the network address, static assets directory, and MySQL data source name.
 	var config configuration
-
-	// Use the flag package to define command-line flags for the network address, static assets directory, and MySQL data source name.
-	// The flag package will parse the command-line arguments and assign the values to the fields in the config struct.
-	flag.StringVar(&config.addr, "addr", ":4000", "HTTP network address")
-	flag.StringVar(&config.staticDir, "static-dir", "./ui/static/", "Path to static assets")
-	flag.StringVar(&config.dsn, "dsn", "", "MySQL data source name")
-	flag.Parse() // Parse the command-line flags.
+	flag.StringVar(&config.Addr, "addr", ":4000", "HTTP network address")
+	flag.StringVar(&config.StaticDir, "static-dir", "./ui/static/", "Path to static assets")
+	flag.StringVar(&config.Dsn, "dsn", "", "MySQL data source name")
+	flag.Parse()
 
 	// Create a new logger for informational messages and write them to os.Stdout.
 	infoLog := log.New(
@@ -70,8 +76,7 @@ func main() {
 		log.Ldate|log.Ltime|log.LUTC,
 	)
 
-	// Create a new logger for error messages and write them to os.Stderr.
-	// Include more detailed information in error logs.
+	// Create a new logger for error messages, write them to os.Stderr, and include more detailed information.
 	errorLog := log.New(
 		os.Stderr,
 		"ERROR\t",
@@ -79,7 +84,7 @@ func main() {
 	)
 
 	// Call the openDB function to open a new database connection.
-	db, err := openDB(config.dsn)
+	db, err := openDB(config.Dsn)
 	// If there's an error, log the error message and stop the application.
 	if err != nil {
 		errorLog.Fatal(err)
@@ -118,13 +123,13 @@ func main() {
 
 	// Create a new HTTP server with the network address from the configuration, the error logger, and the application's routes as the handler.
 	srv := &http.Server{
-		Addr:     config.addr,
+		Addr:     config.Addr,
 		ErrorLog: errorLog,
 		Handler:  app.routes(),
 	}
 
 	// Log a message to indicate that the server is starting.
-	infoLog.Printf("Starting server on %s", config.addr)
+	infoLog.Printf("Starting server on %s", config.Addr)
 	// Start the server and listen for requests.
 	err = srv.ListenAndServe()
 

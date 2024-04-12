@@ -1,14 +1,20 @@
+<!-- This template defines the title of the page as "Home" -->
 {{define "title"}}Home{{end}}
 
+<!-- This template defines the main content of the page -->
 {{define "main"}}
+    <!-- The heading for the list of latest snippets -->
     <h2>Latest Snippets</h2>
+    <!-- If there are any snippets, they're displayed in a table -->
     {{if .SnippetsData}}
     <table>
+        <!-- The headers for the table columns -->
         <tr>
             <th>Title</th>
             <th>Created</th>
             <th>ID</th>
         </tr>
+        <!-- For each snippet, a row is added to the table with the snippet's title, creation date, and ID -->
         {{range .SnippetsData}}
         <tr>
             <td><a href="/snippet/view/{{.ID}}">{{.Title}}</a></td>
@@ -17,6 +23,7 @@
         </tr>
         {{end}}
     </table>
+    <!-- If there are no snippets, a message is displayed -->
     {{else}}
         <p>No snippets found.</p>
     {{end}}

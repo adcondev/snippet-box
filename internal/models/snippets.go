@@ -8,26 +8,31 @@ import (
 	"time"         // Package for measuring and displaying time.
 )
 
-// Snippet is a type that represents a snippet in the database.
+// Snippet represents a snippet in the application. It is used to hold data related to a snippet.
+// A snippet consists of an ID, a title, content, and timestamps for when the snippet was created and when it expires.
 type Snippet struct {
-	ID      int       // The ID of the snippet.
-	Title   string    // The title of the snippet.
-	Content string    // The content of the snippet.
-	Created time.Time // The time when the snippet was created.
-	Expires time.Time // The time when the snippet expires.
+	ID      int       // ID is the unique identifier for the snippet.
+	Title   string    // Title is the title of the snippet.
+	Content string    // Content is the content of the snippet.
+	Created time.Time // Created is the time when the snippet was created.
+	Expires time.Time // Expires is the time when the snippet expires.
 }
 
-// SnippetModel wraps a sql.DB connection pool.
+// SnippetModel wraps a sql.DB connection pool and provides methods for interacting with the snippets table in the database.
+// It holds prepared SQL statements for inserting a snippet, getting a snippet, and getting the latest snippets.
+// This struct is useful for encapsulating the database operations related to snippets.
 type SnippetModel struct {
-	db         *sql.DB   // The database connection pool.
-	InsertStmt *sql.Stmt // The prepared statement for inserting a snippet.
-	GetStmt    *sql.Stmt // The prepared statement for getting a snippet.
-	LatestStmt *sql.Stmt // The prepared statement for getting the latest snippets.
+	db         *sql.DB   // db is the database connection pool.
+	InsertStmt *sql.Stmt // InsertStmt is the prepared statement for inserting a snippet.
+	GetStmt    *sql.Stmt // GetStmt is the prepared statement for getting a snippet.
+	LatestStmt *sql.Stmt // LatestStmt is the prepared statement for getting the latest snippets.
 }
 
-// NewSnippetModel creates a new SnippetModel.
+// NewSnippetModel creates a new SnippetModel with a given database connection.
+// It prepares SQL statements for inserting a snippet, getting a snippet, and getting the latest snippets.
+// These prepared statements are stored in the SnippetModel, which can then be used to perform these operations.
+// This function is useful for setting up the SnippetModel with the SQL statements it needs to interact with the database.
 func NewSnippetModel(db *sql.DB) (*SnippetModel, error) {
-
 	// Define the SQL for inserting a snippet.
 	insert := `INSERT INTO snippets (title, content, created, expires)
     VALUES(?, ?, UTC_TIMESTAMP(), DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? DAY))`
@@ -65,7 +70,10 @@ func NewSnippetModel(db *sql.DB) (*SnippetModel, error) {
 	return &SnippetModel{db, insertStmt, getStmt, latestStmt}, nil
 }
 
-// Insert inserts a new snippet into the database.
+// Insert inserts a new snippet into the database. It starts a new transaction, executes the prepared statement for inserting a snippet,
+// commits the transaction, and retrieves the ID of the new snippet. If there's an error at any point (for example, if the transaction can't be started,
+// if the SQL statement is invalid, if the transaction can't be committed, or if the ID can't be retrieved), it returns 0 and the error.
+// If there's no error, it returns the ID of the new snippet and nil for the error.
 func (sm *SnippetModel) Insert(title string, content string, expires int) (int, error) {
 
 	// Start a new transaction.
@@ -102,7 +110,10 @@ func (sm *SnippetModel) Insert(title string, content string, expires int) (int, 
 	return int(id), nil
 }
 
-// Get retrieves a snippet from the database based on its ID.
+// Get retrieves a snippet from the database based on its ID. It executes the prepared statement for getting a snippet,
+// and scans the result into a new Snippet struct. If there's an error (for example, if the SQL statement is invalid),
+// it handles it accordingly: if the error is that no rows were returned from the query, it returns nil and the ErrNoRecord error;
+// if it's a different error, it returns nil and the error. If there's no error, it returns the Snippet struct and nil for the error.
 func (sm *SnippetModel) Get(id int) (*Snippet, error) {
 
 	// Create a new Snippet struct.
@@ -127,7 +138,9 @@ func (sm *SnippetModel) Get(id int) (*Snippet, error) {
 	return s, nil
 }
 
-// Latest retrieves the latest snippets from the database.
+// Latest retrieves the 10 most recently created snippets that have not expired from the database. It executes the prepared statement for getting the latest snippets,
+// and scans the results into a slice of Snippet structs. If there's an error (for example, if the SQL statement is invalid),
+// it returns nil and the error. If there's no error, it returns the slice of Snippet structs and nil for the error.
 func (sm *SnippetModel) Latest() ([]*Snippet, error) {
 
 	// Execute the prepared statement for getting the latest snippets.

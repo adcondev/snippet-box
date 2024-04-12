@@ -1,21 +1,31 @@
+<!-- This template defines the base structure of the page -->
 {{define "base"}}
 <!doctype html>
 <html lang='en'>
     <head>
+        <!-- The character encoding for the document -->
         <meta charset='utf-8'>
+        <!-- The title of the page, which is defined in each individual page template -->
         <title>{{template "title" .}} - Snippetbox</title>
+        <!-- The main CSS file for the site -->
         <link rel='stylesheet' href='/static/css/main.css'>
+        <!-- The favicon for the site -->
         <link rel='shortcut icon' href='/static/img/favicon.ico' type='image/x-icon'>
+        <!-- The font used on the site -->
         <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700'>
     </head>
     <body>
+        <!-- The site header, which includes the site title and logo -->
         <header>
             <h1><a href='/'>Snippetbox</a></h1>
         </header>
+        <!-- The site navigation, which is defined in each individual page template -->
         {{template "nav" .}}
+        <!-- The main content of the page, which is defined in each individual page template -->
         <main>
             {{template "main" .}}
         </main>
+        <!-- The site footer, which includes a link to the Go website and the current year -->
         <footer>
             Powered by <a href='https://golang.org/'>Go</a> in {{.CurrentYear}}.
         </footer>
