@@ -3,12 +3,15 @@ package main
 
 // Import the necessary packages.
 import (
-	"bytes"         // Package for manipulating byte slices.
+	"bytes" // Package for manipulating byte slices.
+	"errors"
 	"fmt"           // Package for formatted I/O.
 	"net/http"      // Package for building HTTP servers and clients.
 	"path/filepath" // Package for manipulating file paths.
 	"runtime/debug" // Package for providing information about the Go runtime.
 	"time"          // Package for measuring and displaying time.
+
+	"github.com/go-playground/form/v4"
 )
 
 // limitedFileSystem is a wrapper around http.FileSystem that disables directory listings.
@@ -120,4 +123,26 @@ func (app *application) newTemplateData() *templateData {
 	return &templateData{
 		CurrentYear: time.Now().Year(),
 	}
+}
+
+func (app *application) decodePostForm(r *http.Request, target any) error {
+
+	err := r.ParseForm()
+	if err != nil {
+		return err
+	}
+
+	err = app.formDecoder.Decode(target, r.PostForm)
+	if err != nil {
+
+		var invalidDecoderError *form.InvalidDecoderError
+
+		if errors.As(err, &invalidDecoderError) {
+			panic(err)
+		}
+
+		return err
+	}
+
+	return nil
 }

@@ -8,7 +8,8 @@ import (
 	"net/http" // Package for building HTTP servers and clients.
 	"strconv"  // Package for converting strings to numeric types.
 
-	"github.com/julienschmidt/httprouter"         // Import advanced routing and validation package
+	"github.com/julienschmidt/httprouter" // Import advanced routing and validation package
+
 	"snippetbox.consdotpy.xyz/internal/models"    // Import the models package.
 	"snippetbox.consdotpy.xyz/internal/validator" // Import validator package
 )
@@ -17,10 +18,10 @@ import (
 // It includes fields for the title, content, and expiration of the snippet, as well as a Validator
 // for validating the form fields.
 type snippetCreateForm struct {
-	Title               string // Title is the title of the snippet provided by the user.
-	Content             string // Content is the actual code snippet provided by the user.
-	Expires             int    // Expires is the duration after which the snippet expires.
-	validator.Validator        // Validator is used to validate the form fields.
+	Title               string     `form:"title"`   // Title is the title of the snippet provided by the user.
+	Content             string     `form:"content"` // Content is the actual code snippet provided by the user.
+	Expires             int        `form:"expires"` // Expires is the duration after which the snippet expires.
+	validator.Validator `form:"-"` // Validator is used to validate the form fields.
 }
 
 // home serves the root URL ("/"). It fetches the most recent snippets from the database
@@ -105,25 +106,13 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 // into the database, it sends a server error response. If the snippet is inserted successfully,
 // it redirects the client to the page for the new snippet.
 func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) {
-	// Parse the form data.
-	err := r.ParseForm()
+
+	var form snippetCreateForm
+
+	err := app.decodePostForm(r, &form)
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
 		return
-	}
-
-	// Extract the form values.
-	expires, err := strconv.Atoi(r.PostForm.Get("expires"))
-	if err != nil {
-		app.clientError(w, http.StatusBadRequest)
-		return
-	}
-
-	// Initialize a new snippetCreateForm with the form values.
-	form := snippetCreateForm{
-		Title:   r.PostForm.Get("title"),
-		Content: r.PostForm.Get("content"),
-		Expires: expires,
 	}
 
 	// Validate the form values.

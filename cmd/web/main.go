@@ -12,6 +12,7 @@ import (
 
 	"snippetbox.consdotpy.xyz/internal/models" // Import the models package.
 
+	"github.com/go-playground/form/v4"
 	_ "github.com/go-sql-driver/mysql" // Import the MySQL driver.
 )
 
@@ -33,6 +34,7 @@ type application struct {
 	config        configuration                 // config is the application configuration.
 	snippets      *models.SnippetModel          // snippets is the model for snippets.
 	templateCache map[string]*template.Template // templateCache is the cache for templates.
+	formDecoder   *form.Decoder
 }
 
 // openDB opens a new database connection with the provided data source name (DSN).
@@ -105,6 +107,8 @@ func main() {
 	defer snippets.GetStmt.Close()
 	defer snippets.LatestStmt.Close()
 
+	formDecoder := form.NewDecoder()
+
 	// Call the newTemplateCache function to create a new template cache.
 	templateCache, err := newTemplateCache()
 	// If there's an error, log the error message and stop the application.
@@ -119,6 +123,7 @@ func main() {
 		config:        config,
 		snippets:      snippets,
 		templateCache: templateCache,
+		formDecoder:   formDecoder,
 	}
 
 	// Create a new HTTP server with the network address from the configuration, the error logger, and the application's routes as the handler.
