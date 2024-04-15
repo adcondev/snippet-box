@@ -153,10 +153,14 @@ func main() {
 
 	// Create a new HTTP server with the network address from the configuration, the error logger, and the application's routes as the handler.
 	srv := &http.Server{
-		Addr:      config.Addr,
-		ErrorLog:  errorLog,
-		Handler:   app.routes(),
-		TLSConfig: tlsConfig,
+		Addr:           config.Addr,
+		ErrorLog:       errorLog,
+		Handler:        app.routes(),
+		TLSConfig:      tlsConfig,
+		IdleTimeout:    time.Minute,
+		ReadTimeout:    5 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 524288,
 	}
 
 	// Log a message to indicate that the server is starting.
