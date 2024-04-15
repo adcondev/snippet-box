@@ -22,3 +22,6 @@ go.work
 snippetbox
 .env
 *.log
+
+# TLS certificates
+tls/

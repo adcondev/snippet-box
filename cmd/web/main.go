@@ -3,6 +3,7 @@ package main
 
 // Import the necessary packages.
 import (
+	"crypto/tls"
 	"database/sql"  // Package for interacting with SQL databases.
 	"flag"          // Package for parsing command-line flags.
 	"log"           // Package for logging.
@@ -123,6 +124,7 @@ func main() {
 	sessionManager := scs.New()
 	sessionManager.Store = mysqlstore.New(db)
 	sessionManager.Lifetime = 12 * time.Hour
+	sessionManager.Cookie.Secure = true
 
 	// Create a new application struct and assign the loggers, configuration, snippets model, and template cache.
 	app := &application{
@@ -135,17 +137,32 @@ func main() {
 		sessionManager: sessionManager,
 	}
 
+	tlsConfig := &tls.Config{
+		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
+		MinVersion:       tls.VersionTLS10,
+		MaxVersion:       tls.VersionTLS13,
+		CipherSuites: []uint16{
+			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+		},
+	}
+
 	// Create a new HTTP server with the network address from the configuration, the error logger, and the application's routes as the handler.
 	srv := &http.Server{
-		Addr:     config.Addr,
-		ErrorLog: errorLog,
-		Handler:  app.routes(),
+		Addr:      config.Addr,
+		ErrorLog:  errorLog,
+		Handler:   app.routes(),
+		TLSConfig: tlsConfig,
 	}
 
 	// Log a message to indicate that the server is starting.
 	infoLog.Printf("Starting server on %s", config.Addr)
 	// Start the server and listen for requests.
-	err = srv.ListenAndServe()
+	err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
 
 	// If there's an error (for example, if the server can't start), log the error message and stop the application.
 	errorLog.Fatal(err)
