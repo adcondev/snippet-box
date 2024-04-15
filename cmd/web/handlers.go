@@ -40,7 +40,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 	// Create a new template data map and add the snippets to it.
 	// This map will be passed to the template for rendering.
-	data := app.newTemplateData()
+	data := app.newTemplateData(r)
 	data.SnippetsData = snippets
 
 	// Render the home page with the snippets.
@@ -51,10 +51,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 // snippetView serves the "/snippet/view" URL. It fetches a snippet with a given ID from the database
 // and renders it on the page. If the snippet is not found or an error occurs, it sends an appropriate HTTP response.
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
-	// Extract the ID parameter from the URL.
-	params := httprouter.ParamsFromContext(r.Context())
-	id, err := strconv.Atoi(params.ByName("id"))
 
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := strconv.Atoi(params.ByName("id"))
 	// If the ID is not a valid integer or is less than 1, respond with a 404 status.
 	if err != nil || id < 1 {
 		app.notFound(w)
@@ -63,7 +63,6 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch the snippet with the given ID from the database.
 	snippet, err := app.snippets.Get(id)
-
 	// If an error occurs, handle it appropriately.
 	if err != nil {
 		// If no snippet with the given ID was found, respond with a 404 status.
@@ -77,7 +76,7 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// If no error occurs, create a new template data map and add the snippet to it.
-	data := app.newTemplateData()
+	data := app.newTemplateData(r)
 	data.SnippetData = snippet
 
 	// Render the "view.html" template with the provided data.
@@ -89,7 +88,7 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 // This method is used to display the form for creating a new snippet.
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	// Create a new template data map.
-	data := app.newTemplateData()
+	data := app.newTemplateData(r)
 
 	// Initialize a new snippetCreateForm with a default expiration of 365 days.
 	data.Form = snippetCreateForm{
@@ -123,7 +122,7 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 
 	// If the form is not valid, re-render the form with error messages.
 	if !form.Valid() {
-		data := app.newTemplateData()
+		data := app.newTemplateData(r)
 		data.Form = form
 		app.render(w, http.StatusUnprocessableEntity, "create.html", data)
 		return
@@ -136,6 +135,8 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 		app.serverError(w, err)
 		return
 	}
+
+	app.sessionManager.Put(r.Context(), "flash", "Snippet successfully created!")
 
 	// If there's no error, the snippet was inserted successfully.
 	// Redirect the client to the page for the new snippet.

@@ -9,9 +9,12 @@ import (
 	"net/http"      // Package for building HTTP servers and clients.
 	"os"            // Package for interacting with the operating system.
 	"text/template" // Package for manipulating text templates.
+	"time"
 
 	"snippetbox.consdotpy.xyz/internal/models" // Import the models package.
 
+	"github.com/alexedwards/scs/mysqlstore"
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
 	_ "github.com/go-sql-driver/mysql" // Import the MySQL driver.
 )
@@ -29,12 +32,13 @@ type configuration struct {
 // the application configuration, the model for snippets, and the cache for templates.
 // This struct is useful for making these dependencies available throughout the application.
 type application struct {
-	errorLog      *log.Logger                   // errorLog is the logger for errors.
-	infoLog       *log.Logger                   // infoLog is the logger for information.
-	config        configuration                 // config is the application configuration.
-	snippets      *models.SnippetModel          // snippets is the model for snippets.
-	templateCache map[string]*template.Template // templateCache is the cache for templates.
-	formDecoder   *form.Decoder
+	errorLog       *log.Logger                   // errorLog is the logger for errors.
+	infoLog        *log.Logger                   // infoLog is the logger for information.
+	config         configuration                 // config is the application configuration.
+	snippets       *models.SnippetModel          // snippets is the model for snippets.
+	templateCache  map[string]*template.Template // templateCache is the cache for templates.
+	formDecoder    *form.Decoder
+	sessionManager *scs.SessionManager
 }
 
 // openDB opens a new database connection with the provided data source name (DSN).
@@ -116,14 +120,19 @@ func main() {
 		errorLog.Fatal(err)
 	}
 
+	sessionManager := scs.New()
+	sessionManager.Store = mysqlstore.New(db)
+	sessionManager.Lifetime = 12 * time.Hour
+
 	// Create a new application struct and assign the loggers, configuration, snippets model, and template cache.
 	app := &application{
-		errorLog:      errorLog,
-		infoLog:       infoLog,
-		config:        config,
-		snippets:      snippets,
-		templateCache: templateCache,
-		formDecoder:   formDecoder,
+		errorLog:       errorLog,
+		infoLog:        infoLog,
+		config:         config,
+		snippets:       snippets,
+		templateCache:  templateCache,
+		formDecoder:    formDecoder,
+		sessionManager: sessionManager,
 	}
 
 	// Create a new HTTP server with the network address from the configuration, the error logger, and the application's routes as the handler.

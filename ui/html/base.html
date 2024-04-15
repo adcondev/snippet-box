@@ -23,6 +23,9 @@
         {{template "nav" .}}
         <!-- The main content of the page, which is defined in each individual page template -->
         <main>
+            {{with .Flash}}
+                <div class='flash'>{{.}}</div>
+            {{end}}
             {{template "main" .}}
         </main>
         <!-- The site footer, which includes a link to the Go website and the current year -->

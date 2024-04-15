@@ -17,6 +17,7 @@ type templateData struct {
 	SnippetData  *models.Snippet   // SnippetData holds data for a single snippet.
 	SnippetsData []*models.Snippet // SnippetsData holds data for multiple snippets.
 	Form         any               // Form holds form data.
+	Flash        string
 }
 
 // functions is a map that acts as a lookup for functions that can be used in templates.
