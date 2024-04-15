@@ -31,7 +31,7 @@ func (v *Validator) AddFieldError(key, message string) {
 // CheckField checks a condition and, if it's not met, adds an error message for a field to the validator.
 func (v *Validator) CheckField(ok bool, key, message string) {
 	if !ok {
-		v.AddFieldError(message, key)
+		v.AddFieldError(key, message)
 	}
 }
 
