@@ -8,4 +8,10 @@ import (
 
 // ErrNoRecord is an error that is returned when a database query returns no results.
 // It's created using the errors.New function, which creates a new error with the specified message.
-var ErrNoRecord = errors.New("models: no matching record found")
+var (
+	ErrNoRecord = errors.New("models: no matching record found")
+
+	ErrInvalidCredentials = errors.New("models: invalid credentials")
+
+	ErrDuplicateEmail = errors.New("models: duplicate email")
+)

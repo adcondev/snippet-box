@@ -40,6 +40,7 @@ type application struct {
 	templateCache  map[string]*template.Template // templateCache is the cache for templates.
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
+	users          *models.UserModel
 }
 
 // openDB opens a new database connection with the provided data source name (DSN).
@@ -112,6 +113,15 @@ func main() {
 	defer snippets.GetStmt.Close()
 	defer snippets.LatestStmt.Close()
 
+	users, err := models.NewUserModel(db)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
+	defer users.InsertStmt.Close()
+	defer users.AuthStmt.Close()
+	defer users.ExistsStmt.Close()
+
 	formDecoder := form.NewDecoder()
 
 	// Call the newTemplateCache function to create a new template cache.
@@ -135,6 +145,7 @@ func main() {
 		templateCache:  templateCache,
 		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
+		users:          users,
 	}
 
 	tlsConfig := &tls.Config{

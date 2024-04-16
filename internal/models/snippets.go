@@ -22,7 +22,7 @@ type Snippet struct {
 // It holds prepared SQL statements for inserting a snippet, getting a snippet, and getting the latest snippets.
 // This struct is useful for encapsulating the database operations related to snippets.
 type SnippetModel struct {
-	db         *sql.DB   // db is the database connection pool.
+	DB         *sql.DB   // DB is the database connection pool.
 	InsertStmt *sql.Stmt // InsertStmt is the prepared statement for inserting a snippet.
 	GetStmt    *sql.Stmt // GetStmt is the prepared statement for getting a snippet.
 	LatestStmt *sql.Stmt // LatestStmt is the prepared statement for getting the latest snippets.
@@ -78,7 +78,7 @@ func (sm *SnippetModel) Insert(title string, content string, expires int) (int, 
 
 	// Start a new transaction.
 	// If there's an error (for example, if the transaction can't be started), return 0 and the error.
-	tx, err := sm.db.Begin()
+	tx, err := sm.DB.Begin()
 	if err != nil {
 		return 0, err
 	}
