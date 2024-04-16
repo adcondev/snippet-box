@@ -1,9 +1,9 @@
-## 0.14.2 (2024-04-15)
+# 0.15.0 (2024-04-16)
 
 
-### Performance Improvements
+### Features
 
-* :lock: add connection timeouts ([99ba4f4](https://github.com/ConsDotPy/snippet-box/commit/99ba4f438dbea6fe5c89a59008b578d6bb1d8104))
+* :sparkles: add user authentication ([8a5a192](https://github.com/ConsDotPy/snippet-box/commit/8a5a192f4b422bc34c0573d0babf1e2326f40337))
 
 
 
