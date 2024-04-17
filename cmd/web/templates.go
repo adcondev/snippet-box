@@ -13,11 +13,12 @@ import (
 // templateData holds data to be passed into templates. It is used to provide a consistent
 // structure for passing data to templates, making it easier to manage and evolve over time.
 type templateData struct {
-	CurrentYear  int               // CurrentYear holds the current year.
-	SnippetData  *models.Snippet   // SnippetData holds data for a single snippet.
-	SnippetsData []*models.Snippet // SnippetsData holds data for multiple snippets.
-	Form         any               // Form holds form data.
-	Flash        string
+	CurrentYear     int               // CurrentYear holds the current year.
+	SnippetData     *models.Snippet   // SnippetData holds data for a single snippet.
+	SnippetsData    []*models.Snippet // SnippetsData holds data for multiple snippets.
+	Form            any               // Form holds form data.
+	Flash           string
+	IsAuthenticated bool
 }
 
 // functions is a map that acts as a lookup for functions that can be used in templates.

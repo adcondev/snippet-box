@@ -121,8 +121,9 @@ func (app *application) newTemplateData(r *http.Request) *templateData {
 	// Create a new templateData instance.
 	// Set the CurrentYear field to the current year.
 	return &templateData{
-		CurrentYear: time.Now().Year(),
-		Flash:       app.sessionManager.PopString(r.Context(), "flash"),
+		CurrentYear:     time.Now().Year(),
+		Flash:           app.sessionManager.PopString(r.Context(), "flash"),
+		IsAuthenticated: app.isAuthenticated(r),
 	}
 }
 
@@ -135,15 +136,16 @@ func (app *application) decodePostForm(r *http.Request, target any) error {
 
 	err = app.formDecoder.Decode(target, r.PostForm)
 	if err != nil {
-
 		var invalidDecoderError *form.InvalidDecoderError
-
 		if errors.As(err, &invalidDecoderError) {
 			panic(err)
 		}
-
 		return err
 	}
 
 	return nil
+}
+
+func (app *application) isAuthenticated(r *http.Request) bool {
+	return app.sessionManager.Exists(r.Context(), "authenticatedUserID")
 }
