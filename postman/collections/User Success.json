@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "af41b135-cb72-4f75-a7a7-abc2bcf4e3da",
+		"name": "User Success",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "28710272-af41b135-cb72-4f75-a7a7-abc2bcf4e3da"
+	},
+	"item": [
+		{
+			"name": "User Signup",
+			"id": "14d47395-e652-498c-8c50-e76fa45a9b76",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Signup",
+			"id": "5f37cbb3-1ffe-4056-9d3b-487b177bd67d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "adcon",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "reload231014@consdotpy.xyz",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "8characters",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"id": "00d94369-76cc-4ec7-b467-94d8ca5409a6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/login",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"id": "59a8c19e-a9b0-4a72-9b98-003a5b047cf2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/login",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Logout",
+			"id": "3f243238-0f07-4d8a-8659-19fa619f9cb2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/logout",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,443 @@
+{
+	"info": {
+		"_postman_id": "adfb1d81-bb38-4dde-9830-7b57237040f1",
+		"name": "User Fail",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "28710272-adfb1d81-bb38-4dde-9830-7b57237040f1"
+	},
+	"item": [
+		{
+			"name": "User Singup 405",
+			"id": "8b019091-82b9-41ea-8d66-e408d57dc735",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/singup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"singup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Singup 405",
+			"id": "0840b8ab-3a69-455a-9362-7cc7343610a4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/singup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"singup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login 405",
+			"id": "46063b2b-312e-4e02-bd9c-a3c623d49a45",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/login",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login 405",
+			"id": "f7328505-1cb4-4d94-8b4a-4405025b8a96",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/login",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Logout 405",
+			"id": "62ce37d9-c6c1-4e5a-b376-7e70792dcae4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/user/logout",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Nothing User",
+			"id": "b23ae622-6c15-46cb-8022-0d8a5e839ace",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No Name User",
+			"id": "bd042763-88f1-4364-a0b8-4c63f5d1bbfd",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "adcon777@reload.xyz",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Long Name User",
+			"id": "813e62fe-9157-483a-aa96-29f3bc6811f2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "adcon777@reload.xyz",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No Email User",
+			"id": "ed5479ae-f164-4468-9137-e9f9d3d894cf",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "adcon",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid Email User",
+			"id": "c7d3ef93-44cd-40d8-b32a-7ccba21173f6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "adcon",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "a",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "adcon1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No Password User",
+			"id": "f589a9d7-edc7-4212-a144-9366c3bde664",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "adcon",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "adcon123@hotmail.ch",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Short Password User",
+			"id": "4d029a4c-ffe5-4d81-9d60-05d0acb0e621",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "adcon777",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "re.reload@maza.xyz",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Used Email User",
+			"id": "69c7fe05-16ca-483d-8859-a8814f87af91",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Seno Reload",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "re.load@mail.ch",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123412341234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/user/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,331 @@
+{
+	"info": {
+		"_postman_id": "f3ccefd5-f285-4ac6-8c4a-acd14e86b23d",
+		"name": "Snippet Fail",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "28710272-f3ccefd5-f285-4ac6-8c4a-acd14e86b23d"
+	},
+	"item": [
+		{
+			"name": "Snippet View 405",
+			"id": "a8248dfc-fd9d-4b7d-986a-40927a5622d8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/snippet/view/13",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"snippet",
+						"view",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Form 405",
+			"id": "4ad20d8e-feed-4535-91e9-466b2f849200",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/snippet/create",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"snippet",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Home 405",
+			"id": "e0437586-b40d-4549-a7d2-73c6ddeda227",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}",
+					"host": [
+						"{{URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Snippet 405",
+			"id": "0fe15f88-4873-44a8-8be7-654f17259799",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/snippet/create",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"snippet",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Snippet View 404",
+			"id": "cf5e9071-1e58-471a-b657-70dda2622b7d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/snippet/view/1000",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"snippet",
+						"view",
+						"1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Not Found 404",
+			"id": "7007cda2-b623-4853-bfda-1a689b200626",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/missing",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"missing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Long Title Snippet 422",
+			"id": "a8fb0974-e978-4ec8-800d-e6f6fee8f1fd",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "long titleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "ok content",
+							"type": "text"
+						},
+						{
+							"key": "expires",
+							"value": "365",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/snippet/create",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"snippet",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No Tilte Snippet 422",
+			"id": "fa358fda-345e-43e4-885f-c6fbb121db01",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "hello",
+							"type": "text"
+						},
+						{
+							"key": "expires",
+							"value": "365",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/snippet/create",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"snippet",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No Content Snippet 422",
+			"id": "7c16ce7d-047a-425b-b746-f9d287dc0e88",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "ok title",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "expires",
+							"value": "365",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/snippet/create",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"snippet",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Wrong Expire Date Snippet 422",
+			"id": "e15919e6-7c75-4bb8-9f88-74f90b69f5b5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "ok title",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "ok content",
+							"type": "text"
+						},
+						{
+							"key": "expires",
+							"value": "777",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/snippet/create",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"snippet",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
