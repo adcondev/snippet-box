@@ -2,6 +2,7 @@
     "cSpell.words": [
         "alexedwards",
         "Bashō",
+        "csrfhandler",
         "googleapis",
         "gstatic",
         "httprouter",
@@ -15,6 +16,7 @@
         "mysqlstore",
         "Natsume",
         "nosniff",
+        "nosurf",
         "servemux",
         "signup",
         "Singup",
