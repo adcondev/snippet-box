@@ -31,7 +31,7 @@ func (app *application) routes() http.Handler {
 	router.Handler(http.MethodGet, "/static", http.NotFoundHandler())
 	router.Handler(http.MethodGet, "/static/*filepath", http.StripPrefix("/static", fileServer))
 
-	dynamic := alice.New(app.sessionManager.LoadAndSave)
+	dynamic := alice.New(app.sessionManager.LoadAndSave, app.authenticate)
 
 	// Register handler functions for URL patterns.
 	// When a request URL matches one of these patterns, the corresponding handler function is called.

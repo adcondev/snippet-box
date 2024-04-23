@@ -42,7 +42,7 @@ func NewUserModel(db *sql.DB) (*UserModel, error) {
 		return nil, err
 	}
 
-	exists := `SELECT * FROM users`
+	exists := `SELECT EXISTS(SELECT true FROM users WHERE id = ?)`
 
 	existsStmt, err := db.Prepare(exists)
 	if err != nil {
@@ -116,5 +116,10 @@ func (um *UserModel) Authenticate(email, password string) (int, error) {
 }
 
 func (um *UserModel) Exists(id int) (bool, error) {
-	return false, nil
+
+	var exists bool
+
+	err := um.ExistsStmt.QueryRow(id).Scan(&exists)
+
+	return exists, err
 }
