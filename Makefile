@@ -96,5 +96,5 @@ push: tidy audit no-dirty
 production/deploy: confirm tidy audit no-dirty
 	GOOS=linux GOARCH=amd64 go build -ldflags='-s' -o=${TMP_FOLDER}/bin/linux_amd64/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 	upx -5 ${TMP_FOLDER}/bin/linux_amd64/${BINARY_NAME}
-		${TMP_FOLDER}/bin/linux_amd64/${BINARY_NAME}/ -addr=${SB_ADDR} -static-dir=${SB_STATIC_DIR} -dsn=${DB_DSN}
+	${TMP_FOLDER}/bin/linux_amd64/${BINARY_NAME}/ -addr=${SB_ADDR} -static-dir=${SB_STATIC_DIR} -dsn=${DB_DSN}
 	# Include additional deployment steps here...
