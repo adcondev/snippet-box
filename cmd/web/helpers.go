@@ -5,54 +5,14 @@ package main
 import (
 	"bytes" // Package for manipulating byte slices.
 	"errors"
-	"fmt"           // Package for formatted I/O.
-	"net/http"      // Package for building HTTP servers and clients.
-	"path/filepath" // Package for manipulating file paths.
+	"fmt"      // Package for formatted I/O.
+	"net/http" // Package for building HTTP servers and clients.
+	// Package for manipulating file paths.
 	"runtime/debug" // Package for providing information about the Go runtime.
 	"time"          // Package for measuring and displaying time.
 
 	"github.com/go-playground/form/v4"
 )
-
-// limitedFileSystem is a wrapper around http.FileSystem that disables directory listings.
-// It includes a single field, fs, which represents the underlying file system.
-type limitedFileSystem struct {
-	fs http.FileSystem // fs is the underlying file system.
-}
-
-// Open opens a file in the limitedFileSystem. If the file is a directory, it tries to open its index.html file.
-// If the index.html file doesn't exist, it closes the directory and returns an error.
-// If the file or the index.html file exists, it returns the file and no error.
-func (nfs limitedFileSystem) Open(path string) (http.File, error) {
-	// Open the file.
-	f, err := nfs.fs.Open(path)
-	// If there's an error (for example, the file doesn't exist), return it.
-	if err != nil {
-		return nil, err
-	}
-
-	// Get the file's metadata.
-	s, _ := f.Stat()
-	// If the file is a directory...
-	if s.IsDir() {
-		// ...try to open its index.html file.
-		index := filepath.Join(path, "index.html")
-		if _, err := nfs.fs.Open(index); err != nil {
-			// If there's an error (which means the index.html file doesn't exist)...
-			// ...close the directory...
-			closeErr := f.Close()
-			// ...and if there's an error when closing the directory, return it.
-			if closeErr != nil {
-				return nil, closeErr
-			}
-			// Otherwise, return the original error.
-			return nil, err
-		}
-	}
-
-	// If there's no error, return the file.
-	return f, nil
-}
 
 // serverError is a helper function that writes an error message and stack trace to the errorLog,
 // then sends a 500 Internal Server Error response to the user. It takes an http.ResponseWriter to

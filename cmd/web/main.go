@@ -12,7 +12,7 @@ import (
 	"text/template" // Package for manipulating text templates.
 	"time"
 
-	"snippetbox.consdotpy.xyz/internal/models" // Import the models package.
+	"snippetbox.adcon.dev/internal/models" // Import the models package.
 
 	"github.com/alexedwards/scs/mysqlstore"
 	"github.com/alexedwards/scs/v2"

@@ -3,11 +3,13 @@ package main
 
 // Import the necessary packages.
 import (
+	"io/fs"
 	"path/filepath" // Package for manipulating file paths.
 	"text/template" // Package for manipulating text templates.
 	"time"          // Package for measuring and displaying time.
 
-	"snippetbox.consdotpy.xyz/internal/models" // Import the models package.
+	"snippetbox.adcon.dev/internal/models" // Import the models package.
+	"snippetbox.adcon.dev/ui"
 )
 
 // templateData holds data to be passed into templates. It is used to provide a consistent
@@ -40,7 +42,7 @@ func newTemplateCache() (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 
 	// Get a slice of all filepaths with the .html extension in the ui/html/pages folder.
-	pages, err := filepath.Glob("./ui/html/pages/*.html")
+	pages, err := fs.Glob(ui.Files, "html/pages/*.html")
 	// If there's an error, return the cache and the error.
 	if err != nil {
 		return nil, err
@@ -51,20 +53,14 @@ func newTemplateCache() (map[string]*template.Template, error) {
 		// Extract the file name (like 'home.page.html') from the full file path and assign it to the name variable.
 		name := filepath.Base(page)
 
+		patterns := []string{
+			"html/base.html",
+			"html/partials/*.html",
+			page,
+		}
+
 		// Create a new template set.
-		ts, err := template.New(name).Funcs(functions).ParseFiles("./ui/html/base.html")
-		if err != nil {
-			return nil, err
-		}
-
-		// Add the partials layouts to the template set.
-		ts, err = ts.ParseGlob("./ui/html/partials/*.html")
-		if err != nil {
-			return nil, err
-		}
-
-		// Parse templates in pages folder
-		ts, err = ts.ParseFiles(page)
+		ts, err := template.New(name).Funcs(functions).ParseFS(ui.Files, patterns...)
 		if err != nil {
 			return nil, err
 		}

@@ -5,6 +5,8 @@ package main
 import (
 	"net/http" // Package for building HTTP servers and clients.
 
+	"snippetbox.adcon.dev/ui"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
 )
@@ -22,14 +24,9 @@ func (app *application) routes() http.Handler {
 		app.notFound(w)
 	})
 
-	// Create a new file server for serving static files.
-	// The file server is wrapped in the limitedFileSystem to prevent directory listing.
-	fileServer := http.FileServer(limitedFileSystem{http.Dir(app.config.StaticDir)})
+	fileServer := http.FileServer(http.FS(ui.Files))
 
-	// Register the file server as a handler function for all URLs that start with "/static/".
-	// The http.StripPrefix function modifies the request URL's path before the request reaches the file server.
-	router.Handler(http.MethodGet, "/static", http.NotFoundHandler())
-	router.Handler(http.MethodGet, "/static/*filepath", http.StripPrefix("/static", fileServer))
+	router.Handler(http.MethodGet, "/static/*filepath", fileServer)
 
 	dynamic := alice.New(app.sessionManager.LoadAndSave, app.authenticate)
 

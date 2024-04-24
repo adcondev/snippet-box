@@ -53,10 +53,9 @@ func MaxRunes(value string, maxCount int) bool {
 	return utf8.RuneCountInString(value) <= maxCount
 }
 
-// AllowedInt checks if an integer is in a list of allowed values.
-func AllowedInt(value int, allowedValues ...int) bool {
+func AllowedValue[T comparable](value T, allowedValues ...T) bool {
 	for _, allowedVal := range allowedValues {
-		if allowedVal == value {
+		if value == allowedVal {
 			return true
 		}
 	}

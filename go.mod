@@ -1,4 +1,4 @@
-module snippetbox.consdotpy.xyz
+module snippetbox.adcon.dev
 
 go 1.22.1
 

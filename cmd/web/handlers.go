@@ -10,8 +10,8 @@ import (
 
 	"github.com/julienschmidt/httprouter" // Import advanced routing and validation package
 
-	"snippetbox.consdotpy.xyz/internal/models"    // Import the models package.
-	"snippetbox.consdotpy.xyz/internal/validator" // Import validator package
+	"snippetbox.adcon.dev/internal/models"    // Import the models package.
+	"snippetbox.adcon.dev/internal/validator" // Import validator package
 )
 
 // snippetCreateForm represents the form that captures user input for creating a new snippet.
@@ -131,7 +131,7 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	form.CheckField(validator.NotBlank(form.Title), "title", "This field cannot be blank")
 	form.CheckField(validator.MaxRunes(form.Title, 100), "title", "This field cannot be more than 100 characters long")
 	form.CheckField(validator.NotBlank(form.Content), "content", "This field cannot be blank")
-	form.CheckField(validator.AllowedInt(form.Expires, 1, 7, 365), "expires", "This field must equal 1, 7 or 365")
+	form.CheckField(validator.AllowedValue(form.Expires, 1, 7, 365), "expires", "This field must equal 1, 7 or 365")
 
 	// If the form is not valid, re-render the form with error messages.
 	if !form.Valid() {
