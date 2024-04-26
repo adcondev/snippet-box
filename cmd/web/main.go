@@ -29,18 +29,15 @@ type configuration struct {
 	Dsn       string // Secret is the secret key used for session authentication.
 }
 
-// application holds the application-wide dependencies. It includes fields for the error and info loggers,
-// the application configuration, the model for snippets, and the cache for templates.
-// This struct is useful for making these dependencies available throughout the application.
 type application struct {
-	errorLog       *log.Logger                   // errorLog is the logger for errors.
-	infoLog        *log.Logger                   // infoLog is the logger for information.
-	config         configuration                 // config is the application configuration.
-	snippets       *models.SnippetModel          // snippets is the model for snippets.
-	templateCache  map[string]*template.Template // templateCache is the cache for templates.
+	errorLog       *log.Logger
+	infoLog        *log.Logger
+	config         configuration
+	snippets       models.SnippetModelInterface
+	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
-	users          *models.UserModel
+	users          models.UserModelInterface
 }
 
 // openDB opens a new database connection with the provided data source name (DSN).
@@ -150,7 +147,8 @@ func main() {
 
 	tlsConfig := &tls.Config{
 		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
-		MinVersion:       tls.VersionTLS13,
+		MinVersion:       tls.VersionTLS11,
+		MaxVersion:       tls.VersionTLS13,
 		CipherSuites: []uint16{
 			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
 			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,

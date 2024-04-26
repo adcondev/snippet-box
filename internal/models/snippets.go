@@ -28,6 +28,12 @@ type SnippetModel struct {
 	LatestStmt *sql.Stmt // LatestStmt is the prepared statement for getting the latest snippets.
 }
 
+type SnippetModelInterface interface {
+	Insert(title string, content string, expires int) (int, error)
+	Get(id int) (*Snippet, error)
+	Latest() ([]*Snippet, error)
+}
+
 // NewSnippetModel creates a new SnippetModel with a given database connection.
 // It prepares SQL statements for inserting a snippet, getting a snippet, and getting the latest snippets.
 // These prepared statements are stored in the SnippetModel, which can then be used to perform these operations.

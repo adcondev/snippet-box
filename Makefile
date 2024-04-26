@@ -48,13 +48,23 @@ audit:
 ## test: run all tests
 .PHONY: test
 test:
-	go test -v -race -buildvcs ./...
+	go clean -testcache
+	go test -v -race -buildvcs -failfast ./...
+
+## test/short: run non-short tests
+.PHONY: test/short
+test/short:
+	go clean -testcache
+	go test -v -race -buildvcs -failfast -short ./...
 
 ## test/cover: run all tests and display coverage
 .PHONY: test/cover
 test/cover:
-	go test -v -race -buildvcs -coverprofile=${TMP_FOLDER}/coverage.out ./...
+	go clean -testcache
+	go test -v -race -buildvcs -failfast -covermode=atomic -coverprofile=${TMP_FOLDER}/coverage.out ./...
+	go tool cover -func=${TMP_FOLDER}/coverage.out
 	go tool cover -html=${TMP_FOLDER}/coverage.out
+
 
 ## build: build the application
 .PHONY: build
