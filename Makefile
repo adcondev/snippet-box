@@ -38,7 +38,7 @@ audit:
 	go vet ./...
 	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./...
 	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
-	go test -race -buildvcs -vet=off ./...
+	go test -v -race -buildvcs -short -failfast -vet=off ./...
 
 
 # ==================================================================================== #
@@ -77,7 +77,7 @@ build:
 run: build
 	${TMP_FOLDER}/bin/${BINARY_NAME} -addr=${SB_ADDR} -static-dir=${SB_STATIC_DIR} -dsn=${DB_DSN}
 
-## run/logs: run the  application
+## run/logs: run the application with logs written to files
 .PHONY: run/logs
 run/logs: build
 	${TMP_FOLDER}/bin/${BINARY_NAME} -addr=${SB_ADDR} -static-dir=${SB_STATIC_DIR} -dsn=${DB_DSN} >>${TMP_FOLDER}/info.log 2>>${TMP_FOLDER}/error.log
