@@ -8,6 +8,8 @@ import (
 
 func TestUserModelExists(t *testing.T) {
 
+	t.Parallel()
+
 	if testing.Short() {
 		t.Skip("models: skipping integration test")
 	}
