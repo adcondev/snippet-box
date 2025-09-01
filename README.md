@@ -1,6 +1,19 @@
-# SnippetBox
+# Snippet Box 📦
 
-SnippetBox is a web application that allows users to create, store, and manage code snippets.
+A modern, fast code snippet sharing platform built with Go. Share, organize, and collaborate on code snippets.
+
+## Features
+
+- 🔐 **Authentication**: Secure user accounts
+- 🔗 **Share Links**: Public and private sharing
+- ⚡ **Fast**: Go backend with optimized database queries
+- 🎯 **API**: RESTful API for integrations
+
+## Tech Stack
+
+- **Backend**: Go 1.20+
+- **Database**: PostgreSQL
+- **Frontend**: HTML/CSS/Vanilla JS
 
 ## Features
 
@@ -57,5 +70,6 @@ make audit
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 ## License
+
 
 Distributed under the MIT License. See `LICENSE` for more information.
