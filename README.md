@@ -4,23 +4,16 @@ A modern, fast code snippet sharing platform built with Go. Share, organize, and
 
 ## Features
 
-- 🔐 **Authentication**: Secure user accounts
-- 🔗 **Share Links**: Public and private sharing
-- ⚡ **Fast**: Go backend with optimized database queries
-- 🎯 **API**: RESTful API for integrations
+- 🔐 **Authentication**: User authentication and session management.
+- 🔗 **Share Links**: Public links. 
+- ⚡ **Fast**: Go backend with optimized database queries. Dynamic HTML templates for user interface.
+- 🎯 **API**: RESTful API for integrations. CRUD operations for code snippets. Efficient request routing.
 
 ## Tech Stack
 
 - **Backend**: Go 1.20+
 - **Database**: PostgreSQL
 - **Frontend**: HTML/CSS/Vanilla JS
-
-## Features
-
-- User authentication and session management
-- CRUD operations for code snippets
-- Dynamic HTML templates for user interface
-- Efficient request routing
 
 ## Getting Started
 
@@ -73,3 +66,4 @@ Contributions are what make the open-source community such an amazing place to l
 
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
