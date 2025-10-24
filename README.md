@@ -59,6 +59,9 @@ graph TD;
 3.  **Set up the database:**
     Connect to your MySQL instance and run the SQL scripts in the `/sql` directory to create the necessary tables and user.
 
+    > **⚠️ Security Warning:**  
+    > Before running `sql/create_user.sql`, **edit the file to change the default username and password to strong, unique values**.  
+    > Never use the default credentials in production environments.
 ### Usage
 
 1.  **Configure the application:**
