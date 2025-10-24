@@ -1,69 +1,79 @@
-# Snippet Box 📦
+# SnippetBox: A Professional Code Snippet Manager
 
-A modern, fast code snippet sharing platform built with Go. Share, organize, and collaborate on code snippets.
+![Project Logo](https://via.placeholder.com/300x150.png?text=SnippetBox+Logo)
+
+---
+
+### Badges
+
+![Go Version](https://img.shields.io/badge/go-1.22-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
+
+---
+
+## Overview
+
+SnippetBox is a secure and efficient web application for managing and sharing code snippets. Built with Go, it offers a clean user interface and a robust backend, making it an ideal tool for developers who need to organize their code snippets effectively. The application features user authentication, session management, and a RESTful API for seamless integration with other tools.
 
 ## Features
 
-- 🔐 **Authentication**: User authentication and session management.
-- 🔗 **Share Links**: Public links. 
-- ⚡ **Fast**: Go backend with optimized database queries. Dynamic HTML templates for user interface.
-- 🎯 **API**: RESTful API for integrations. CRUD operations for code snippets. Efficient request routing.
+*   **Secure User Authentication:** Sign up, log in, and manage your account securely.
+*   **Snippet Management:** Create, view, and delete your code snippets with ease.
+*   **Session Management:** Persistent sessions allow you to stay logged in.
+*   **RESTful API:** A well-defined API for programmatic access to your snippets.
+*   **Secure by Design:** Implemented with security best practices, including HTTPS and password hashing.
 
-## Tech Stack
+## Architecture
 
-- **Backend**: Go 1.20+
-- **Database**: PostgreSQL
-- **Frontend**: HTML/CSS/Vanilla JS
+The application follows a classic client-server architecture, with a Go backend serving HTML templates and a RESTful API. The database is a MySQL instance, and communication is secured with TLS.
+
+```mermaid
+graph TD;
+    A[Client] -->|HTTPS Request| B(Go Web Server);
+    B -->|Database Query| C(MySQL Database);
+    C -->|Query Result| B;
+    B -->|HTML/JSON Response| A;
+```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Go
-- MySQL
+*   Go (version 1.22 or higher)
+*   MySQL
 
 ### Installation
 
-1. Clone the repository
-```sh
-git clone https://github.com/consdotpy/snippetbox.git
-```
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/your-username/snippetbox.git
+    cd snippetbox
+    ```
 
-2. Install dependencies
-```sh
-go mod download
-```
+2.  **Install dependencies:**
+    ```sh
+    go mod tidy
+    ```
 
-3. Set up your MySQL database using the provided SQL scripts in the `sql/` directory. Be sure to change credentials in the `sql/create_user.sql` script before running it.
+3.  **Set up the database:**
+    Connect to your MySQL instance and run the SQL scripts in the `/sql` directory to create the necessary tables and user.
 
-```sh
-sudo mysql
-source sql/*.sql
-```
+### Usage
 
+1.  **Configure the application:**
+    Set the required environment variables, such as the database DSN. You can use the `.env.example` file as a template.
 
-## Usage
-
-Check `.env.example` for environment variables that need to be set. Then, run the application using `Makefile`:
-
-```sh
-make run
-```
-
-## Testing
-
-To run quality control checks, execute:
-
-```sh
-make audit
-```
+2.  **Run the server:**
+    ```sh
+    go run ./cmd/web -dsn="your_dsn_here"
+    ```
+    The server will start on `https://localhost:4000` by default.
 
 ## Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are welcome! Please feel free to submit a pull request or open an issue to discuss your ideas.
 
 ## License
 
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
