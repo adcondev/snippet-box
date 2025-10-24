@@ -66,7 +66,7 @@ graph TD;
 
 2.  **Run the server:**
     ```sh
-    go run ./cmd/web -dsn="your_dsn_here"
+    go run ./cmd/web -dsn="web:password@/snippetbox?parseTime=true"
     ```
     The server will start on `https://localhost:4000` by default.
 
