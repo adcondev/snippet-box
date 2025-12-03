@@ -73,6 +73,17 @@ graph TD;
     ```
     The server will start on `https://localhost:4000` by default.
 
+## Testing
+
+To run the tests for the application, use the following command:
+
+```sh
+go test -v ./...
+```
+
+This will run all unit and integration tests across the project packages.
+
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue to discuss your ideas.

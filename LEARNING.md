@@ -22,6 +22,13 @@ This repository contains the source code for SnippetBox, a full-stack web applic
 *   **`go-playground/form/v4`:** A versatile library for decoding form data from HTTP requests into Go structs, simplifying data validation and processing.
 *   **`justinas/alice`:** A lightweight library for chaining middleware, making it easy to compose and apply middleware to HTTP handlers in a clean and readable way.
 *   **`golang.org/x/crypto`:** Provides robust cryptographic primitives, used in this project for securely hashing and verifying user passwords.
+*   **`github.com/cosmtrek/air`:** Utilized for live reloading during development, significantly improving the developer experience by automatically rebuilding and restarting the application on file changes.
+
+## Development Tools
+
+*   **Postman:** Used for testing and documenting the API endpoints, ensuring that the RESTful API functions correctly under various scenarios (success, failure, validation errors).
+*   **Make:** Used to automate common development tasks such as running tests, building the application, and executing database migrations.
+
 
 ## Major Achievements and Skills Demonstrated
 
@@ -42,4 +49,5 @@ This repository contains the source code for SnippetBox, a full-stack web applic
 *   **Application Security:** Practical experience in implementing security best practices, including password hashing, session security, and preventing common vulnerabilities.
 *   **Software Architecture:** Experience in designing and structuring a web application with a clear separation of concerns (e.g., handlers, models, views).
 *   **API Design:** Proficiency in designing and implementing clean and intuitive APIs.
-*   **Testing:** Competence in writing effective unit and integration tests to ensure application reliability.
+*   **Testing:** Competence in writing effective unit and integration tests using Go's standard `testing` package and `net/http/httptest`. Experience with table-driven tests to cover various scenarios efficiently.
+
