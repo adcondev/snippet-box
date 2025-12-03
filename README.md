@@ -1,93 +1,117 @@
-# SnippetBox: A Professional Code Snippet Manager
+# Snippet Box
 
-![Project Logo](https://via.placeholder.com/300x150.png?text=SnippetBox+Logo)
+A secure, high-performance web application for organizing and sharing code snippets. Built with Go and MySQL.
 
----
+![Snippet Box Logo](https://via.placeholder.com/150?text=Snippet+Box)
 
-### Badges
-
-![Go Version](https://img.shields.io/badge/go-1.22-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
-
----
+[![Go Report Card](https://goreportcard.com/badge/github.com/adcondev/snippet-box)](https://goreportcard.com/report/github.com/adcondev/snippet-box)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://github.com/adcondev/snippet-box/actions/workflows/release.yml/badge.svg)](https://github.com/adcondev/snippet-box/actions)
 
 ## Overview
 
-SnippetBox is a secure and efficient web application for managing and sharing code snippets. Built with Go, it offers a clean user interface and a robust backend, making it an ideal tool for developers who need to organize their code snippets effectively. The application features user authentication, session management, and a RESTful API for seamless integration with other tools.
-
-## Features
-
-*   **Secure User Authentication:** Sign up, log in, and manage your account securely.
-*   **Snippet Management:** Create, view, and delete your code snippets with ease.
-*   **Session Management:** Persistent sessions allow you to stay logged in.
-*   **RESTful API:** A well-defined API for programmatic access to your snippets.
-*   **Secure by Design:** Implemented with security best practices, including HTTPS and password hashing.
+Snippet Box is a self-hosted application that allows users to paste and save text snippets (such as code blocks or configuration files) for later retrieval. It features secure user authentication, snippet expiration, and a clean, responsive interface.
 
 ## Architecture
 
-The application follows a classic client-server architecture, with a Go backend serving HTML templates and a RESTful API. The database is a MySQL instance, and communication is secured with TLS.
+The application follows a standard MVC-like pattern, separating the web layer (handlers/routes) from the data layer (models).
 
 ```mermaid
-graph TD;
-    A[Client] -->|HTTPS Request| B(Go Web Server);
-    B -->|Database Query| C(MySQL Database);
-    C -->|Query Result| B;
-    B -->|HTML/JSON Response| A;
+graph TD
+    Client[Client Browser] -->|HTTPS Request| Middleware[Middleware Stack]
+    Middleware -->|Secure, Log, Recover| Router[HTTP Router]
+    Router -->|Route| Handler[Request Handlers]
+    
+    subgraph Application
+    Handler -->|Read/Write| Model[Data Models]
+    Handler -->|Render| Template[HTML Templates]
+    end
+    
+    subgraph Data
+    Model -->|SQL| DB[(MySQL Database)]
+    end
+    
+    Template -->|HTML Response| Client
 ```
 
-## Getting Started
+## Features
+
+*   **Create Snippets**: Save text with a title and expiration time (1 day, 1 week, 365 days).
+*   **User Accounts**: Secure signup and login functionality.
+*   **View & Share**: Each snippet gets a unique permalink.
+*   **Security**:
+    *   HTTPS/TLS enforced.
+    *   Secure session management using MySQL.
+    *   Protection against XSS, CSRF, and clickjacking.
+    *   Bcrypt password hashing.
+
+## Tech Stack
+
+*   **Backend**: Go (Golang)
+*   **Database**: MySQL
+*   **Router**: httprouter
+*   **Session Store**: SCS (MySQL)
+*   **Frontend**: Go HTML Templates, CSS
+
+## Installation
 
 ### Prerequisites
 
-*   Go (version 1.22 or higher)
-*   MySQL
+*   Go 1.22 or higher
+*   MySQL 8.0+
+*   Make (optional, for running Makefile commands)
 
-### Installation
+### Setup
 
 1.  **Clone the repository:**
-    ```sh
+    ```bash
     git clone https://github.com/adcondev/snippet-box.git
-    cd snippetbox
+    cd snippet-box
     ```
 
-2.  **Install dependencies:**
-    ```sh
-    go mod tidy
+2.  **Database Setup:**
+    Create a MySQL database and user, then run the SQL scripts in the `sql/` directory to create the necessary tables (`snippets`, `users`, `sessions`).
+    ```sql
+    source sql/create_snippetbox_db.sql;
+    source sql/create_users_table.sql;
+    source sql/create_snippets_table.sql;
+    source sql/create_sessions_table.sql;
     ```
 
-3.  **Set up the database:**
-    Connect to your MySQL instance and run the SQL scripts in the `/sql` directory to create the necessary tables and user.
-
-    > **⚠️ Security Warning:**  
-    > Before running `sql/create_user.sql`, **edit the file to change the default username and password to strong, unique values**.  
-    > Never use the default credentials in production environments.
-### Usage
-
-1.  **Configure the application:**
-    Set the required environment variables, such as the database DSN. You can use the `.env.example` file as a template.
-
-2.  **Run the server:**
-    ```sh
-    go run ./cmd/web -dsn="web:password@/snippetbox?parseTime=true"
+3.  **TLS Certificates:**
+    Generate self-signed certificates for development (or use real ones for prod) and place them in a `tls/` directory:
+    ```bash
+    mkdir tls
+    cd tls
+    go run /usr/local/go/src/crypto/tls/generate_cert.go --rsa-bits=2048 --host=localhost
     ```
-    The server will start on `https://localhost:4000` by default.
 
-## Testing
+4.  **Configuration:**
+    The application accepts command-line flags for configuration.
+    *   `-addr`: HTTP network address (default ":4000")
+    *   `-dsn`: MySQL data source name (e.g., `web:pass@/snippetbox?parseTime=true`)
+    *   `-static-dir`: Path to static assets
 
-To run the tests for the application, use the following command:
+## Usage
 
-```sh
-go test -v ./...
+To run the application locally:
+
+```bash
+# Using Make
+make run SB_ADDR=":4000" DB_DSN="web:pass@/snippetbox?parseTime=true"
+
+# Or directly with Go
+go run ./cmd/web -addr=":4000" -dsn="web:pass@/snippetbox?parseTime=true"
 ```
 
-This will run all unit and integration tests across the project packages.
-
+Visit `https://localhost:4000` in your browser. Note that you will need to accept the self-signed certificate warning if running in development mode.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a pull request or open an issue to discuss your ideas.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
+1.  Fork the project
+2.  Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
